@@ -1,5 +1,4 @@
 import type { Env } from "@/env/Env"
-import { pandocConvertFileResponseSchema } from "@/schema/pandocConvertFileResponseSchema"
 import { pandocHandlerPost } from "@/server/handlers/pandocHandlerPost"
 import { pandocHandlerPut } from "@/server/handlers/pandocHandlerPut"
 import { pandocResponseSchema } from "@client/pandocConvertResponseSchema"
@@ -177,6 +176,10 @@ export function addRoutesPandocOpenapi(app: Hono<{ Bindings: Env }>) {
     }),
     pandocHandlerPost,
   )
+
+  const pandocConvertFileResponseSchema = a.object({
+    file: a.string(),
+  })
 
   app.put(
     "/",
