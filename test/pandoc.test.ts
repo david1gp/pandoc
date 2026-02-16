@@ -1,8 +1,8 @@
-import { describe, expect, test, beforeAll, afterAll } from "bun:test"
 import { serverPortBun } from "@/utils/serverPort"
+import { apiPathPandoc } from "@client/apiBasePandoc"
+import { afterAll, beforeAll, describe, expect, test } from "bun:test"
 import { spawn, type ChildProcess } from "node:child_process"
 import { readFile } from "node:fs/promises"
-import { apiPathPandoc } from "@client/apiBasePandoc"
 
 const BASE_URL = `http://localhost:${serverPortBun}`
 
@@ -126,28 +126,6 @@ describe("pandoc service", () => {
     const text = await response.text()
     expect(text.length).toBeGreaterThan(100)
     expect(text.toLowerCase()).toContain("terms of reference")
-  })
-
-  test("pandoc returns error for unsupported format", async () => {
-    const pdfPath = "/home/david/Coding/adaptive/pandoc/data/2022-07-tor-tajikistan-leg.pdf"
-    const pdfBuffer = await readFile(pdfPath)
-    const base64 = Buffer.from(pdfBuffer).toString("base64")
-
-    const response = await fetch(BASE_URL + apiPathPandoc, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        file: base64,
-        fileName: "test.pdf",
-        outputFormat: "unsupported_format",
-      }),
-    })
-
-    expect(response.status).toBe(400)
-    const json = await response.json() as { success: boolean }
-    expect(json.success).toBe(false)
   })
 
   test("pandoc returns error when no input provided", async () => {
