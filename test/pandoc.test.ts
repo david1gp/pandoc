@@ -2,6 +2,7 @@ import { describe, expect, test, beforeAll, afterAll } from "bun:test"
 import { serverPortBun } from "@/utils/serverPort"
 import { spawn, type ChildProcess } from "node:child_process"
 import { readFile } from "node:fs/promises"
+import { apiPathPandoc } from "@client/apiBasePandoc"
 
 const BASE_URL = `http://localhost:${serverPortBun}`
 
@@ -93,7 +94,7 @@ describe("pandoc service", () => {
   })
 
   test("swagger ui endpoint returns HTML", async () => {
-    const response = await fetch(BASE_URL + "/")
+    const response = await fetch(BASE_URL + apiPathPandoc)
     expect(response.status).toBe(200)
     expect(response.headers.get("Content-Type")?.toLowerCase()).toContain("text/html")
     const html = await response.text()
@@ -106,15 +107,15 @@ describe("pandoc service", () => {
     const pdfBuffer = await readFile(pdfPath)
     const base64 = Buffer.from(pdfBuffer).toString("base64")
 
-    const response = await fetch(BASE_URL + "/pandoc", {
-      method: "POST",
+    const response = await fetch(BASE_URL + apiPathPandoc, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         file: base64,
         fileName: "2022-07-tor-tajikistan-leg.pdf",
-        outputFormat: "md",
+        outputFormat: "markdown",
       }),
     })
 
@@ -132,8 +133,8 @@ describe("pandoc service", () => {
     const pdfBuffer = await readFile(pdfPath)
     const base64 = Buffer.from(pdfBuffer).toString("base64")
 
-    const response = await fetch(BASE_URL + "/pandoc", {
-      method: "POST",
+    const response = await fetch(BASE_URL + apiPathPandoc, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
@@ -150,7 +151,7 @@ describe("pandoc service", () => {
   })
 
   test("pandoc returns error when no input provided", async () => {
-    const response = await fetch(BASE_URL + "/pandoc", {
+    const response = await fetch(BASE_URL + apiPathPandoc, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

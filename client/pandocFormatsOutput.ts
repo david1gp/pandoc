@@ -1,4 +1,9 @@
-export const pandocOutputFormats = [
+import * as v from "valibot"
+import type { PandocInputFormat } from "./pandocFormatsInput"
+import { pandocInputFormats } from "./pandocFormatsInput"
+import { pandocFormatsShared } from "./pandocFormatsShared"
+
+export const pandocFormatsOutputOnly = [
   "ansi",
   "asciidoc",
   "asciidoc_legacy",
@@ -10,65 +15,28 @@ export const pandocOutputFormats = [
   "bbcode_steam",
   "bbcode_xenforo",
   "beamer",
-  "biblatex",
-  "bibtex",
   "chunkedhtml",
-  "commonmark",
-  "commonmark_x",
   "context",
-  "csljson",
   "djot",
-  "docbook",
-  "docbook4",
-  "docbook5",
-  "docx",
-  "dokuwiki",
   "dzslides",
-  "epub",
-  "epub2",
-  "epub3",
-  "fb2",
-  "gfm",
   "haddock",
-  "html",
   "html4",
   "html5",
   "icml",
-  "ipynb",
-  "jats",
   "jats_archiving",
   "jats_articleauthoring",
   "jats_publishing",
-  "jira",
-  "json",
-  "latex",
   "man",
-  "markdown",
-  "markdown_github",
-  "markdown_mmd",
-  "markdown_phpextra",
-  "markdown_strict",
   "markua",
-  "mediawiki",
-  "ms",
-  "muse",
-  "native",
-  "odt",
-  "opendocument",
-  "opml",
-  "org",
   "pdf",
   "plain",
   "pptx",
   "revealjs",
-  "rst",
-  "rtf",
   "s5",
   "slideous",
   "slidy",
   "tei",
   "texinfo",
-  "textile",
   "typst",
   "vimdoc",
   "xml",
@@ -76,8 +44,22 @@ export const pandocOutputFormats = [
   "zimwiki",
 ] as const
 
+export type PandocFormatOutputOnly = (typeof pandocFormatsOutputOnly)[number]
+
+export const pandocOutputFormats = [
+  ...pandocFormatsShared,
+  ...pandocFormatsOutputOnly,
+] as const
+
 export type PandocOutputFormat = (typeof pandocOutputFormats)[number]
 
 export const isPandocOutputFormat = (value: string): value is PandocOutputFormat => {
   return (pandocOutputFormats as readonly string[]).includes(value)
 }
+
+export const isPandocInputFormat = (value: string): value is PandocInputFormat => {
+  return (pandocInputFormats as readonly string[]).includes(value)
+}
+
+export const pandocOutputFormatSchema = v.picklist([...pandocOutputFormats])
+export const pandocInputFormatSchema = v.picklist([...pandocInputFormats])

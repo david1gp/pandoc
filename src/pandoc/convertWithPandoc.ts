@@ -1,12 +1,13 @@
-import { createResult, createResultError, type PromiseResult } from "~utils/result/Result"
 import { spawn } from "node:child_process"
-import { readFile, writeFile, unlink } from "node:fs/promises"
-import { basename, extname } from "node:path"
+import { readFile, unlink } from "node:fs/promises"
+import { extname } from "node:path"
+import { createResult, createResultError, type PromiseResult } from "~utils/result/Result"
 
 const op = "convertWithPandoc"
 
 export async function convertWithPandoc(
   inputPath: string,
+  inputFormat: string,
   outputPath: string,
   outputFormat: string,
 ): PromiseResult<string> {
@@ -24,7 +25,10 @@ export async function convertWithPandoc(
 
   return new Promise((resolve) => {
     const args = [processedInputPath, "-o", outputPath]
-    if (outputFormat !== "md") {
+    if (inputFormat) {
+      args.push("-f", inputFormat)
+    }
+    if (outputFormat !== "markdown") {
       args.push("-t", outputFormat)
     } else {
       args.push("-t", "markdown")
@@ -42,7 +46,9 @@ export async function convertWithPandoc(
       if (processedInputPath !== inputPath) {
         try {
           await unlink(processedInputPath)
-        } catch { /* ignore */ }
+        } catch {
+          /* ignore */
+        }
       }
 
       if (code !== 0) {

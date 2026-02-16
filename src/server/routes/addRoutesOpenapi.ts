@@ -1,5 +1,11 @@
-import type { Hono } from "hono"
 import type { Env } from "@/env/Env"
+import { pandocConvertFileResponseSchema } from "@/schema/pandocConvertFileResponseSchema"
+import { pandocHandlerPost } from "@/server/handlers/pandocHandlerPost"
+import { pandocHandlerPut } from "@/server/handlers/pandocHandlerPut"
+import { pandocResponseSchema } from "@client/pandocConvertResponseSchema"
+import { pandocFromFileBodySchema } from "@client/pandocFromFileBodySchema"
+import { pandocFromUrlQuerySchema } from "@client/pandocFromUrlQuerySchema"
+import type { Hono } from "hono"
 import { describeRoute, openAPIRouteHandler, resolver } from "hono-openapi"
 import * as a from "valibot"
 import { resultErrSchema } from "~utils/result/resultErrSchema"
@@ -20,6 +26,7 @@ export function addRoutesOpenapi(app: Hono<{ Bindings: Env }>) {
 
 **Quick Links**
 
+- Pandoc Manual: [https://pandoc.org/MANUAL.html](https://pandoc.org/MANUAL.html)
 - code - [https://github.com/david1gp/pandoc](https://github.com/david1gp/pandoc)
 `,
       },
@@ -135,28 +142,15 @@ export function addRoutesOpenapiSwagger(app: Hono<{ Bindings: Env }>) {
 }
 
 export function addRoutesPandocOpenapi(app: Hono<{ Bindings: Env }>) {
-  const pandocInputSchema = a.object({
-    url: a.optional(a.string()),
-    file: a.optional(a.string()),
-    fileName: a.optional(a.string()),
-    contentType: a.optional(a.string()),
-    outputFormat: a.optional(a.string()),
-    token: a.optional(a.string()),
-  })
-
-  const pandocOutputSchema = a.object({
-    url: a.string(),
-  })
-
   app.post(
-    "/pandoc",
+    "/",
     describeRoute({
-      description: "Convert a document using Pandoc",
+      description: "Convert a document using Pandoc (from URL)",
       tags: ["pandoc"],
       security: [],
       requestBody: {
         content: {
-          "application/json": { schema: resolver(pandocInputSchema) as any },
+          "application/json": { schema: resolver(pandocFromUrlQuerySchema) as any },
         },
       },
       responses: {
@@ -164,17 +158,11 @@ export function addRoutesPandocOpenapi(app: Hono<{ Bindings: Env }>) {
           description: "Conversion successful",
           content: {
             "text/markdown": { schema: resolver(a.string()) },
-            "application/json": { schema: resolver(pandocOutputSchema) as any },
+            "application/json": { schema: resolver(pandocResponseSchema) as any },
           },
         },
         400: {
           description: "Bad Request",
-          content: {
-            "application/json": { schema: resolver(resultErrSchema) },
-          },
-        },
-        401: {
-          description: "Unauthorized",
           content: {
             "application/json": { schema: resolver(resultErrSchema) },
           },
@@ -187,6 +175,42 @@ export function addRoutesPandocOpenapi(app: Hono<{ Bindings: Env }>) {
         },
       },
     }),
-    (c) => c.text(""),
+    pandocHandlerPost,
+  )
+
+  app.put(
+    "/",
+    describeRoute({
+      description: "Convert a document using Pandoc (from base64 file)",
+      tags: ["pandoc"],
+      security: [],
+      requestBody: {
+        content: {
+          "application/json": { schema: resolver(pandocFromFileBodySchema) as any },
+        },
+      },
+      responses: {
+        200: {
+          description: "Conversion successful",
+          content: {
+            "text/markdown": { schema: resolver(a.string()) },
+            "application/json": { schema: resolver(pandocConvertFileResponseSchema) as any },
+          },
+        },
+        400: {
+          description: "Bad Request",
+          content: {
+            "application/json": { schema: resolver(resultErrSchema) },
+          },
+        },
+        500: {
+          description: "Internal Server Error",
+          content: {
+            "application/json": { schema: resolver(resultErrSchema) },
+          },
+        },
+      },
+    }),
+    pandocHandlerPut,
   )
 }

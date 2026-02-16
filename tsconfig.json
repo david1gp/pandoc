@@ -16,6 +16,7 @@
     "types": ["bun-types"],
     "paths": {
       "@/*": ["./src/*"],
+      "@client/*": ["./client/*"],
       "~utils/*": ["./node_modules/@adaptive-ds/utils/dist/*"],
     },
     "noUncheckedIndexedAccess": true,
@@ -26,6 +27,6 @@
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true
   },
-  "include": ["src/**/*", "test/**/*"],
+  "include": ["src/**/*", "test/**/*", "client/**/*"],
   "exclude": ["node_modules"]
 }
