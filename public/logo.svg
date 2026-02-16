@@ -1,0 +1,9 @@
+<svg version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <title>Pandoc Logo</title>
+  <rect width="100" height="100" ry="35.34" fill="#fed" stroke-linecap="round" stroke-width="15"/>
+  <circle cx="50" cy="50" r="50" display="none" fill="#fed" stroke-linecap="round" stroke-width="15"/>
+  <g transform="skewX(-6) translate(8 1)" fill="none" stroke="#4093da" stroke-linecap="round" stroke-linejoin="round" stroke-width="6">
+    <path d="m30 10v80m15-80v80m-25-80h40l18 18v25h-33"/>
+    <path d="m61 10 17 17h-17v-17" fill="#4093da" stroke-width="4"/>
+  </g>
+</svg>
