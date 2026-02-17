@@ -33,6 +33,21 @@
     "trailingComma": "all"
   },
   "type": "module",
-  "private": true,
+  "private": false,
+  "description": "A self-hosted Pandoc API for document conversion between 40+ formats.",
+  "homepage": "https://github.com/david1gp/pandoc",
+  "keywords": [
+    "bun",
+    "pandoc",
+    "document-conversion",
+    "docx",
+    "markdown",
+    "pdf",
+    "api",
+    "converter"
+  ],
+  "repository": {
+    "url": "git+https://github.com/david1gp/pandoc.git"
+  },
   "license": "MIT"
 }
