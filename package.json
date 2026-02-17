@@ -1,6 +1,6 @@
 {
   "name": "@adaptive-ds/pandoc",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "scripts": {
     "dev": "bun --hot run src/server/server.ts",
     "start": "bun run src/server/server.ts",
