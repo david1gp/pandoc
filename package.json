@@ -50,5 +50,11 @@
   "repository": {
     "url": "git+https://github.com/david1gp/pandoc.git"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "exports": {
+    "./*": "./dist/*"
+  },
+  "files": [
+    "dist"
+  ]
 }
