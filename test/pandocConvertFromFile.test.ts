@@ -1,4 +1,5 @@
-import { apiPandocConvertFromFile } from "@client/apiPandocConvertFromFile"
+import { apiPandocConvertFromFileText } from "@client/apiPandocConvertFromFileText"
+import { apiPandocConvertFromFileBinary } from "@client/apiPandocConvertFromFileBinary"
 import { apiPathPandocFromFile } from "@client/apiPathPandocFromFile"
 import { describe, expect, test } from "bun:test"
 import { BASE_URL } from "./setup"
@@ -9,7 +10,7 @@ describe("pandoc convert from file", () => {
       const markdown = "# Hello World\n\nThis is a test."
       const base64 = Buffer.from(markdown).toString("base64")
 
-      const result = await apiPandocConvertFromFile({
+      const result = await apiPandocConvertFromFileText({
         fileBase64: base64,
         inputFormat: "markdown",
         outputFormat: "html",
@@ -22,11 +23,11 @@ describe("pandoc convert from file", () => {
       }
     })
 
-    test("binary format returns decoded string", async () => {
+    test("binary format returns Uint8Array", async () => {
       const markdown = "# Test"
       const base64 = Buffer.from(markdown).toString("base64")
 
-      const result = await apiPandocConvertFromFile({
+      const result = await apiPandocConvertFromFileBinary({
         fileBase64: base64,
         inputFormat: "markdown",
         outputFormat: "docx",
@@ -34,7 +35,7 @@ describe("pandoc convert from file", () => {
 
       expect(result.success).toBe(true)
       if (result.success) {
-        expect(typeof result.data).toBe("string")
+        expect(result.data).toBeInstanceOf(Uint8Array)
         expect(result.data.length).toBeGreaterThan(0)
       }
     })

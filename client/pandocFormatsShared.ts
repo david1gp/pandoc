@@ -1,4 +1,4 @@
-export const pandocFormatsShared = [
+export const pandocFormatsSharedText = [
   "biblatex",
   "bibtex",
   "commonmark",
@@ -7,12 +7,7 @@ export const pandocFormatsShared = [
   "docbook",
   "docbook4",
   "docbook5",
-  "docx",
   "dokuwiki",
-  "epub",
-  "epub2",
-  "epub3",
-  "fb2",
   "gfm",
   "haddock",
   "html",
@@ -21,6 +16,7 @@ export const pandocFormatsShared = [
   "jira",
   "json",
   "latex",
+  "man",
   "markdown",
   "markdown_github",
   "markdown_mmd",
@@ -30,14 +26,31 @@ export const pandocFormatsShared = [
   "ms",
   "muse",
   "native",
-  "odt",
   "opendocument",
   "opml",
   "org",
-  "pdf",
   "rst",
   "rtf",
   "textile",
+] as const
+
+export type PandocFormatSharedText = (typeof pandocFormatsSharedText)[number]
+
+export const pandocFormatsSharedBinary = [
+  "docx",
+  "epub",
+  "epub2",
+  "epub3",
+  "fb2",
+  "odt",
+  "pdf",
+] as const
+
+export type PandocFormatSharedBinary = (typeof pandocFormatsSharedBinary)[number]
+
+export const pandocFormatsShared = [
+  ...pandocFormatsSharedText,
+  ...pandocFormatsSharedBinary,
 ] as const
 
 export type PandocFormatShared = (typeof pandocFormatsShared)[number]

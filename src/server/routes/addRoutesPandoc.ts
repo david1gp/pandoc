@@ -4,12 +4,24 @@ import { pandocHandlerUrl } from "@/server/handlers/pandocHandlerUrl"
 import { apiPathPandocFromFile } from "@client/apiPathPandocFromFile"
 import { apiPathPandocFromUrl } from "@client/apiPathPandocFromUrl"
 import { binaryFormats, plainTextFormats } from "@client/pandocFormatsText"
-import { pandocFromFileBodySchema } from "@client/pandocFromFileBodySchema"
-import { pandocFromUrlQuerySchema } from "@client/pandocFromUrlQuerySchema"
+import { pandocFromFileBinaryBodySchema } from "@client/pandocFromFileBinaryBodySchema"
+import { pandocFromFileTextBodySchema } from "@client/pandocFromFileTextBodySchema"
+import { pandocFromUrlBinaryQuerySchema } from "@client/pandocFromUrlBinaryQuerySchema"
+import { pandocFromUrlTextQuerySchema } from "@client/pandocFromUrlTextQuerySchema"
 import type { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import * as a from "valibot"
 import { resultErrSchema } from "~utils/result/resultErrSchema"
+
+const pandocFromFileBodySchema = a.union([
+  pandocFromFileTextBodySchema,
+  pandocFromFileBinaryBodySchema,
+])
+
+const pandocFromUrlQuerySchema = a.union([
+  pandocFromUrlTextQuerySchema,
+  pandocFromUrlBinaryQuerySchema,
+])
 
 export function addRoutesPandoc(app: Hono<{ Bindings: Env }>) {
   const plainTextFormatsDescription = `

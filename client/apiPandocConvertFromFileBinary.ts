@@ -1,14 +1,13 @@
-import type { PandocFromFileBodyType } from "@client/pandocFromFileBodySchema"
-import { pandocFormatIsText } from "@client/pandocFormatsText"
 import { createError, createResult, type PromiseResult } from "~utils/result/Result"
 import { resultTryParsingFetchErr } from "~utils/result/resultTryParsingFetchErr"
 import { apiPathPandocFromFile } from "./apiPathPandocFromFile"
+import type { PandocFromFileBinaryBodyType } from "./pandocFromFileBinaryBodySchema"
 
-export async function apiPandocConvertFromFile(
-  body: PandocFromFileBodyType,
+export async function apiPandocConvertFromFileBinary(
+  args: PandocFromFileBinaryBodyType,
   baseUrl: string,
-): PromiseResult<string> {
-  const op = "apiPandocConvertFromFile"
+): PromiseResult<Uint8Array<ArrayBuffer>> {
+  const op = "apiPandocConvertFromFileBinary"
 
   if (!baseUrl) {
     return createError(op, "baseUrl is required")
@@ -16,7 +15,7 @@ export async function apiPandocConvertFromFile(
 
   const url = new URL(apiPathPandocFromFile, baseUrl)
 
-  const bodyJson = JSON.stringify(body)
+  const bodyJson = JSON.stringify(args)
 
   const response = await fetch(url.toString(), {
     method: "PUT",
@@ -31,11 +30,6 @@ export async function apiPandocConvertFromFile(
     return resultTryParsingFetchErr(op, text, response.status, response.statusText)
   }
 
-  if (pandocFormatIsText(body.outputFormat)) {
-    return createResult(text)
-  }
-
   const binaryData = Uint8Array.from(atob(text), (c) => c.charCodeAt(0))
-  const decoder = new TextDecoder("utf-8", { fatal: false })
-  return createResult(decoder.decode(binaryData))
+  return createResult(binaryData)
 }

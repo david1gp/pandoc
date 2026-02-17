@@ -1,14 +1,13 @@
-import type { PandocFromUrlQueryType } from "@client/pandocFromUrlQuerySchema"
-import { pandocFormatIsText } from "@client/pandocFormatsText"
 import { createError, createResult, type PromiseResult } from "~utils/result/Result"
 import { resultTryParsingFetchErr } from "~utils/result/resultTryParsingFetchErr"
 import { apiPathPandocFromUrl } from "./apiPathPandocFromUrl"
+import type { PandocFromUrlTextQueryType } from "./pandocFromUrlTextQuerySchema"
 
-export async function apiPandocConvertFromUrl(
-  body: PandocFromUrlQueryType,
+export async function apiPandocConvertFromUrlText(
+  args: PandocFromUrlTextQueryType,
   baseUrl: string,
 ): PromiseResult<string> {
-  const op = "apiPandocConvertFromUrl"
+  const op = "apiPandocConvertFromUrlText"
 
   if (!baseUrl) {
     return createError(op, "baseUrl is required")
@@ -16,7 +15,7 @@ export async function apiPandocConvertFromUrl(
 
   const url = new URL(apiPathPandocFromUrl, baseUrl)
 
-  const bodyJson = JSON.stringify(body)
+  const bodyJson = JSON.stringify(args)
 
   const response = await fetch(url.toString(), {
     method: "POST",
@@ -31,11 +30,5 @@ export async function apiPandocConvertFromUrl(
     return resultTryParsingFetchErr(op, text, response.status, response.statusText)
   }
 
-  if (pandocFormatIsText(body.outputFormat)) {
-    return createResult(text)
-  }
-
-  const binaryData = Uint8Array.from(atob(text), (c) => c.charCodeAt(0))
-  const decoder = new TextDecoder("utf-8", { fatal: false })
-  return createResult(decoder.decode(binaryData))
+  return createResult(text)
 }

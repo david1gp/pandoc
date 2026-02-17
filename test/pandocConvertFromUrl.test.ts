@@ -1,4 +1,4 @@
-import { apiPandocConvertFromUrl } from "@client/apiPandocConvertFromUrl"
+import { apiPandocConvertFromUrlText } from "@client/apiPandocConvertFromUrlText"
 import { apiPathPandocFromUrl } from "@client/apiPathPandocFromUrl"
 import { describe, expect, test } from "bun:test"
 import { BASE_URL } from "./setup"
@@ -6,7 +6,7 @@ import { BASE_URL } from "./setup"
 describe("pandoc convert from url", () => {
   describe("client library", () => {
     test("returns error when url is empty", async () => {
-      const result = await apiPandocConvertFromUrl({ url: "", outputFormat: "markdown" }, BASE_URL)
+      const result = await apiPandocConvertFromUrlText({ url: "", outputFormat: "markdown" }, BASE_URL)
 
       expect(result.success).toBe(false)
     })
