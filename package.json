@@ -4,6 +4,7 @@
   "scripts": {
     "dev": "bun --hot run src/server/server.ts",
     "start": "bun run src/server/server.ts",
+    "build": "tsc -p ./tsconfig.client.json",
     "format": "bun run prettier --write ./src ./client",
     "init:user": "bash ops/setup/setup_01_create_user.sh",
     "init:bun": "bash ops/setup/setup_02_install_bun.sh",
