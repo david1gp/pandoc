@@ -25,10 +25,10 @@ export function addRoutesOpenapi(app: Hono<{ Bindings: Env }>) {
 
 **Quick Links**
 
-- Pandoc Manual: [https://pandoc.org/MANUAL.html](https://pandoc.org/MANUAL.html)
-- Pandoc web: [https://pandoc.org/app/](https://pandoc.org/app/)
 - code - [https://github.com/david1gp/pandoc](https://github.com/david1gp/pandoc)
 - npm - [https://www.npmjs.com/package/@adaptive-ds/pandoc](https://www.npmjs.com/package/@adaptive-ds/pandoc)
+- pandoc manual: [https://pandoc.org/MANUAL.html](https://pandoc.org/MANUAL.html)
+- pandoc web: [https://pandoc.org/app/](https://pandoc.org/app/)
 `,
       },
     },
@@ -115,6 +115,9 @@ export function addRoutesOpenapiSwagger(app: Hono<{ Bindings: Env }>) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Adaptive Pandoc API - Swagger UI</title>
+
+  <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 
   <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5.31.0/swagger-ui.css">
 </head>
