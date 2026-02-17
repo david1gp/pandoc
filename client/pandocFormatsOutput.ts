@@ -46,10 +46,7 @@ export const pandocFormatsOutputOnly = [
 
 export type PandocFormatOutputOnly = (typeof pandocFormatsOutputOnly)[number]
 
-export const pandocOutputFormats = [
-  ...pandocFormatsShared,
-  ...pandocFormatsOutputOnly,
-] as const
+export const pandocOutputFormats = [...pandocFormatsShared, ...pandocFormatsOutputOnly] as const
 
 export type PandocOutputFormat = (typeof pandocOutputFormats)[number]
 

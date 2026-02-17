@@ -52,7 +52,7 @@ export async function handlePandocConversion(
 
     const fileContentResult = await readFile(outputFilePath)
     const base64 = btoa(String.fromCharCode(...fileContentResult))
-    return c.json({ file: base64 }, 200)
+    return c.json({ fileBase64: base64 }, 200)
   } catch (e) {
     const error = createResultError(op, e instanceof Error ? e.message : "Unknown error")
     return c.json(error, 500)

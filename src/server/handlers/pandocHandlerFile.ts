@@ -6,7 +6,7 @@ import { handlePandocConversion } from "./pandocHandlerShared"
 
 const op = "pandocHandlerPut"
 
-export async function pandocHandlerPut(c: HonoContext): Promise<Response> {
+export async function pandocHandlerFile(c: HonoContext): Promise<Response> {
   const jsonText = await c.req.text()
   if (!jsonText) {
     const error = createResultError(op, "Missing request body")
@@ -25,12 +25,12 @@ export async function pandocHandlerPut(c: HonoContext): Promise<Response> {
   const outputFormat = input.outputFormat ?? "markdown"
   const inputFormat = input.inputFormat
 
-  if (!input.file) {
+  if (!input.fileBase64) {
     const error = createResultError(op, "File content is empty")
     return c.json(error, 400)
   }
 
-  const decoded = Uint8Array.from(atob(input.file), (ch) => ch.charCodeAt(0))
+  const decoded = Uint8Array.from(atob(input.fileBase64), (ch) => ch.charCodeAt(0))
 
   return handlePandocConversion(c, decoded, inputFormat, outputFormat)
 }

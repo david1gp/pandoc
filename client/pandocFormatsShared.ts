@@ -34,6 +34,7 @@ export const pandocFormatsShared = [
   "opendocument",
   "opml",
   "org",
+  "pdf",
   "rst",
   "rtf",
   "textile",

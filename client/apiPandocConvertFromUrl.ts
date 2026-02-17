@@ -1,10 +1,10 @@
-import { apiPathPandoc } from "@client/apiBasePandoc"
 import type { PandocConvertResponse } from "@client/pandocConvertResponseSchema"
 import { pandocResponseSchema } from "@client/pandocConvertResponseSchema"
 import type { PandocFromUrlQueryType } from "@client/pandocFromUrlQuerySchema"
 import * as a from "valibot"
 import { createError, createResult, type PromiseResult } from "~utils/result/Result"
 import { resultTryParsingFetchErr } from "~utils/result/resultTryParsingFetchErr"
+import { apiPathPandocFromUrl } from "./apiPathPandocFromUrl"
 
 export async function apiPandocConvertFromUrl(
   baseUrl: string,
@@ -16,7 +16,7 @@ export async function apiPandocConvertFromUrl(
     return createError(op, "baseUrl is required")
   }
 
-  const url = new URL(apiPathPandoc, baseUrl)
+  const url = new URL(apiPathPandocFromUrl, baseUrl)
 
   const bodyJson = JSON.stringify(body)
 
@@ -35,7 +35,7 @@ export async function apiPandocConvertFromUrl(
 
   const contentType = response.headers.get("content-type") ?? ""
   if (contentType.includes("text/markdown")) {
-    return createResult({ url: text })
+    return createResult({ fileBase64: btoa(text) })
   }
 
   const schema = a.pipe(a.string(), a.parseJson(), pandocResponseSchema)

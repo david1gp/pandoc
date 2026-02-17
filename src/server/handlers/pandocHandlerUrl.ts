@@ -8,23 +8,7 @@ import { handlePandocConversion } from "./pandocHandlerShared"
 
 const op = "pandocHandlerPost"
 
-function getFormatFromUrl(urlString: string): string | undefined {
-  try {
-    const url = new URL(urlString)
-    const pathParts = url.pathname.split("/")
-    const fileName = pathParts[pathParts.length - 1]
-    if (!fileName) return undefined
-    const ext = fileName.split(".").pop()?.toLowerCase()
-    if (!ext) return undefined
-    if (ext === "md") return "markdown"
-    if (isPandocInputFormat(ext)) return ext
-    return undefined
-  } catch {
-    return undefined
-  }
-}
-
-export async function pandocHandlerPost(c: HonoContext): Promise<Response> {
+export async function pandocHandlerUrl(c: HonoContext): Promise<Response> {
   const jsonText = await c.req.text()
   if (!jsonText) {
     const error = createResultError(op, "Missing request body")
@@ -44,7 +28,10 @@ export async function pandocHandlerPost(c: HonoContext): Promise<Response> {
   const inputFormat = input.inputFormat ?? getFormatFromUrl(input.url)
 
   if (!inputFormat) {
-    const error = createResultError(op, "Unable to determine input format. Please provide inputFormat explicitly or ensure the URL contains a file with a recognized extension.")
+    const error = createResultError(
+      op,
+      "Unable to determine input format. Please provide inputFormat explicitly or ensure the URL contains a file with a recognized extension.",
+    )
     return c.json(error, 400)
   }
 
@@ -55,4 +42,20 @@ export async function pandocHandlerPost(c: HonoContext): Promise<Response> {
   }
 
   return handlePandocConversion(c, downloadResult.data.content, inputFormat, outputFormat)
+}
+
+function getFormatFromUrl(urlString: string): string | undefined {
+  try {
+    const url = new URL(urlString)
+    const pathParts = url.pathname.split("/")
+    const fileName = pathParts[pathParts.length - 1]
+    if (!fileName) return undefined
+    const ext = fileName.split(".").pop()?.toLowerCase()
+    if (!ext) return undefined
+    if (ext === "md") return "markdown"
+    if (isPandocInputFormat(ext)) return ext
+    return undefined
+  } catch {
+    return undefined
+  }
 }

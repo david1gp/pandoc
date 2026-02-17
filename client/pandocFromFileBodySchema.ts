@@ -3,7 +3,7 @@ import { pandocOutputFormats } from "@client/pandocFormatsOutput"
 import * as a from "valibot"
 
 export const pandocFromFileBodySchema = a.object({
-  file: a.string(),
+  fileBase64: a.string(),
   contentType: a.optional(a.string()),
   inputFormat: a.picklist(pandocInputFormats),
   outputFormat: a.optional(a.picklist(pandocOutputFormats)),

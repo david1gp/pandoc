@@ -1,6 +1,5 @@
 import { spawn } from "node:child_process"
-import { readFile, unlink } from "node:fs/promises"
-import { extname } from "node:path"
+import { readFile } from "node:fs/promises"
 import { createResult, createResultError, type PromiseResult } from "~utils/result/Result"
 
 const op = "convertWithPandoc"
@@ -11,28 +10,14 @@ export async function convertWithPandoc(
   outputPath: string,
   outputFormat: string,
 ): PromiseResult<string> {
-  const inputExt = extname(inputPath).toLowerCase()
-  let processedInputPath = inputPath
-
-  if (inputExt === ".pdf") {
-    const pdfTextPath = inputPath + ".txt"
-    const pdfResult = await convertPdfToText(inputPath, pdfTextPath)
-    if (!pdfResult.success) {
-      return pdfResult
-    }
-    processedInputPath = pdfTextPath
-  }
+  let effectiveInputFormat: string | undefined = inputFormat || undefined
 
   return new Promise((resolve) => {
-    const args = [processedInputPath, "-o", outputPath]
-    if (inputFormat) {
-      args.push("-f", inputFormat)
+    const args = [inputPath, "-o", outputPath]
+    if (effectiveInputFormat) {
+      args.push("-f", effectiveInputFormat)
     }
-    if (outputFormat !== "markdown") {
-      args.push("-t", outputFormat)
-    } else {
-      args.push("-t", "markdown")
-    }
+    args.push("-t", outputFormat ?? "markdown")
 
     const pandoc = spawn("pandoc", args)
 
@@ -43,14 +28,6 @@ export async function convertWithPandoc(
     })
 
     pandoc.on("close", async (code) => {
-      if (processedInputPath !== inputPath) {
-        try {
-          await unlink(processedInputPath)
-        } catch {
-          /* ignore */
-        }
-      }
-
       if (code !== 0) {
         resolve(createResultError(op, `Pandoc exited with code ${code}: ${stderr}`))
         return
@@ -66,30 +43,6 @@ export async function convertWithPandoc(
     })
 
     pandoc.on("error", (e) => {
-      resolve(createResultError(op, e.message))
-    })
-  })
-}
-
-async function convertPdfToText(pdfPath: string, textPath: string): PromiseResult<string> {
-  return new Promise((resolve) => {
-    const pdftotext = spawn("pdftotext", ["-layout", pdfPath, textPath])
-
-    let stderr = ""
-
-    pdftotext.stderr.on("data", (data) => {
-      stderr += data.toString()
-    })
-
-    pdftotext.on("close", (code) => {
-      if (code !== 0) {
-        resolve(createResultError(op, `pdftotext exited with code ${code}: ${stderr}`))
-        return
-      }
-      resolve(createResult(textPath))
-    })
-
-    pdftotext.on("error", (e) => {
       resolve(createResultError(op, e.message))
     })
   })

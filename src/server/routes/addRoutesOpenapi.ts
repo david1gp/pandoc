@@ -1,6 +1,6 @@
 import type { Env } from "@/env/Env"
-import { pandocHandlerPost } from "@/server/handlers/pandocHandlerPost"
-import { pandocHandlerPut } from "@/server/handlers/pandocHandlerPut"
+import { pandocHandlerFile } from "@/server/handlers/pandocHandlerFile"
+import { pandocHandlerUrl } from "@/server/handlers/pandocHandlerUrl"
 import { pandocResponseSchema } from "@client/pandocConvertResponseSchema"
 import { pandocFromFileBodySchema } from "@client/pandocFromFileBodySchema"
 import { pandocFromUrlQuerySchema } from "@client/pandocFromUrlQuerySchema"
@@ -26,7 +26,9 @@ export function addRoutesOpenapi(app: Hono<{ Bindings: Env }>) {
 **Quick Links**
 
 - Pandoc Manual: [https://pandoc.org/MANUAL.html](https://pandoc.org/MANUAL.html)
+- Pandoc web: [https://pandoc.org/app/](https://pandoc.org/app/)
 - code - [https://github.com/david1gp/pandoc](https://github.com/david1gp/pandoc)
+- npm - [https://www.npmjs.com/package/@adaptive-ds/pandoc](https://www.npmjs.com/package/@adaptive-ds/pandoc)
 `,
       },
     },
@@ -142,7 +144,7 @@ export function addRoutesOpenapiSwagger(app: Hono<{ Bindings: Env }>) {
 
 export function addRoutesPandocOpenapi(app: Hono<{ Bindings: Env }>) {
   app.post(
-    "/",
+    "/convert/url",
     describeRoute({
       description: "Convert a document using Pandoc (from URL)",
       tags: ["pandoc"],
@@ -174,15 +176,15 @@ export function addRoutesPandocOpenapi(app: Hono<{ Bindings: Env }>) {
         },
       },
     }),
-    pandocHandlerPost,
+    pandocHandlerUrl,
   )
 
   const pandocConvertFileResponseSchema = a.object({
-    file: a.string(),
+    fileBase64: a.string(),
   })
 
   app.put(
-    "/",
+    "/convert/file",
     describeRoute({
       description: "Convert a document using Pandoc (from base64 file)",
       tags: ["pandoc"],
@@ -214,6 +216,6 @@ export function addRoutesPandocOpenapi(app: Hono<{ Bindings: Env }>) {
         },
       },
     }),
-    pandocHandlerPut,
+    pandocHandlerFile,
   )
 }
