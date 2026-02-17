@@ -2,8 +2,9 @@
   "name": "@adaptive-ds/pandoc",
   "version": "0.1.0",
   "scripts": {
-    "dev": "bun run src/server/server.ts --hot",
+    "dev": "bun --hot run src/server/server.ts",
     "start": "bun run src/server/server.ts",
+    "format": "bun run prettier --write ./src ./client",
     "init:user": "bash ops/setup/setup_01_create_user.sh",
     "init:bun": "bash ops/setup/setup_02_install_bun.sh",
     "init": "bun run init:user && bun run init:bun",
