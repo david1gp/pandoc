@@ -41,6 +41,16 @@ export async function pandocHandlerUrl(c: HonoContext): Promise<Response> {
     return c.json(error, 400)
   }
 
+  const MAX_FILE_SIZE = 100 * 1024 * 1024
+  if (downloadResult.data.content.length > MAX_FILE_SIZE) {
+    const error = createResultError(
+      op,
+      "File size exceeds maximum allowed size of 100MB",
+      downloadResult.data.content.length.toString(),
+    )
+    return c.json(error, 413)
+  }
+
   return handlePandocConversion(c, downloadResult.data.content, inputFormat, outputFormat)
 }
 

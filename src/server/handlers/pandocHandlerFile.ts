@@ -32,5 +32,11 @@ export async function pandocHandlerFile(c: HonoContext): Promise<Response> {
 
   const decoded = Uint8Array.from(atob(input.fileBase64), (ch) => ch.charCodeAt(0))
 
+  const MAX_FILE_SIZE = 100 * 1024 * 1024
+  if (decoded.length > MAX_FILE_SIZE) {
+    const error = createResultError(op, "File size exceeds maximum allowed size of 100MB", decoded.length.toString())
+    return c.json(error, 413)
+  }
+
   return handlePandocConversion(c, decoded, inputFormat, outputFormat)
 }
