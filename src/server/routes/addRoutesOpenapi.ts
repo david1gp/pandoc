@@ -1,4 +1,5 @@
 import type { Env } from "@/env/Env"
+import { packageVersion } from "@/env/packageVersion"
 import { pandocHandlerFile } from "@/server/handlers/pandocHandlerFile"
 import { pandocHandlerUrl } from "@/server/handlers/pandocHandlerUrl"
 import { pandocResponseSchema } from "@client/pandocConvertResponseSchema"
@@ -8,8 +9,6 @@ import type { Hono } from "hono"
 import { describeRoute, openAPIRouteHandler, resolver } from "hono-openapi"
 import * as a from "valibot"
 import { resultErrSchema } from "~utils/result/resultErrSchema"
-
-const packageVersion = "0.1.0"
 
 export function addRoutesOpenapi(app: Hono<{ Bindings: Env }>) {
   const openApiOptions = {
