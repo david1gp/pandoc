@@ -7,10 +7,7 @@ export const pandocFromUrlQuerySchema = a.object({
   inputFormat: a.optional(
     a.pipe(a.picklist(pandocInputFormats), a.description("Input document format (e.g., pdf, docx, html)")),
   ),
-  outputFormat: a.optional(
-    a.pipe(a.picklist(pandocOutputFormats), a.description("Output document format (e.g., markdown, html, pdf)")),
-  ),
-  token: a.optional(a.pipe(a.string(), a.description("Optional authentication token"))),
+  outputFormat: a.pipe(a.picklist(pandocOutputFormats), a.description("Output document format (e.g., markdown, html, pdf)")),
 })
 
 export type PandocFromUrlQueryType = a.InferOutput<typeof pandocFromUrlQuerySchema>

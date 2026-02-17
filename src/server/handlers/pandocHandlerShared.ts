@@ -1,6 +1,7 @@
 import { convertWithPandoc } from "@/pandoc/convertWithPandoc"
 import type { HonoContext } from "@/utils/HonoContext"
 import { isPandocInputFormat, isPandocOutputFormat } from "@client/pandocFormatsOutput"
+import { pandocFormatIsText } from "@client/pandocFormatsText"
 import { randomUUID } from "node:crypto"
 import { readFile, unlink, writeFile } from "node:fs/promises"
 import { createResultError } from "~utils/result/Result"
@@ -43,16 +44,18 @@ export async function handlePandocConversion(
       return c.json(error, 500)
     }
 
-    if (outputFormat === "markdown") {
+    if (pandocFormatIsText(outputFormat)) {
       const outputContent = await readFile(outputFilePath, "utf-8")
       return new Response(outputContent, {
-        headers: { "Content-Type": "text/markdown" },
+        headers: { "Content-Type": getSpecificTextContentType(outputFormat) },
       })
     }
 
     const fileContentResult = await readFile(outputFilePath)
     const base64 = btoa(String.fromCharCode(...fileContentResult))
-    return c.json({ fileBase64: base64 }, 200)
+    return new Response(base64, {
+      headers: { "Content-Type": "text/plain" },
+    })
   } catch (e) {
     const error = createResultError(op, e instanceof Error ? e.message : "Unknown error")
     return c.json(error, 500)
@@ -73,3 +76,16 @@ export async function handlePandocConversion(
     }
   }
 }
+
+const specificTextContentType: Record<string, string> = {
+  markdown: "text/markdown",
+  html: "text/html",
+  html4: "text/html",
+  html5: "text/html",
+  json: "application/json",
+  ipynb: "application/json",
+  latex: "application/x-latex",
+  tex: "application/x-tex",
+} as const
+
+const getSpecificTextContentType = (format: string): string => specificTextContentType[format] ?? "text/plain"

@@ -1,15 +1,13 @@
-import type { PandocConvertResponse } from "@client/pandocConvertResponseSchema"
-import { pandocResponseSchema } from "@client/pandocConvertResponseSchema"
 import type { PandocFromUrlQueryType } from "@client/pandocFromUrlQuerySchema"
-import * as a from "valibot"
+import { pandocFormatIsText } from "@client/pandocFormatsText"
 import { createError, createResult, type PromiseResult } from "~utils/result/Result"
 import { resultTryParsingFetchErr } from "~utils/result/resultTryParsingFetchErr"
 import { apiPathPandocFromUrl } from "./apiPathPandocFromUrl"
 
 export async function apiPandocConvertFromUrl(
-  baseUrl: string,
   body: PandocFromUrlQueryType,
-): PromiseResult<PandocConvertResponse> {
+  baseUrl: string,
+): PromiseResult<string> {
   const op = "apiPandocConvertFromUrl"
 
   if (!baseUrl) {
@@ -33,17 +31,11 @@ export async function apiPandocConvertFromUrl(
     return resultTryParsingFetchErr(op, text, response.status, response.statusText)
   }
 
-  const contentType = response.headers.get("content-type") ?? ""
-  if (contentType.includes("text/markdown")) {
-    return createResult({ fileBase64: btoa(text) })
+  if (pandocFormatIsText(body.outputFormat)) {
+    return createResult(text)
   }
 
-  const schema = a.pipe(a.string(), a.parseJson(), pandocResponseSchema)
-  const parseResult = a.safeParse(schema, text)
-  if (!parseResult.success) {
-    const errorMessage = a.summarize(parseResult.issues)
-    return createError(op, errorMessage, text)
-  }
-
-  return createResult(parseResult.output)
+  const binaryData = Uint8Array.from(atob(text), (c) => c.charCodeAt(0))
+  const decoder = new TextDecoder("utf-8", { fatal: false })
+  return createResult(decoder.decode(binaryData))
 }

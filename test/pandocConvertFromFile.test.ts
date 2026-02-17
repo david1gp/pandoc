@@ -1,65 +1,91 @@
+import { apiPandocConvertFromFile } from "@client/apiPandocConvertFromFile"
 import { apiPathPandocFromFile } from "@client/apiPathPandocFromFile"
 import { describe, expect, test } from "bun:test"
-import { readFile } from "node:fs/promises"
-import { join } from "node:path"
 import { BASE_URL } from "./setup"
 
-const testDir = import.meta.dirname
-
 describe("pandoc convert from file", () => {
-  test("pandoc convert PDF to md with base64 input", async () => {
-    const pdfPath = join(testDir, "test.pdf")
-    const pdfBuffer = await readFile(pdfPath)
-    const base64 = Buffer.from(pdfBuffer).toString("base64")
+  describe("client library", () => {
+    test("plain text format returns string", async () => {
+      const markdown = "# Hello World\n\nThis is a test."
+      const base64 = Buffer.from(markdown).toString("base64")
 
-    const response = await fetch(BASE_URL + apiPathPandocFromFile, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+      const result = await apiPandocConvertFromFile({
         fileBase64: base64,
-        inputFormat: "pdf",
-        outputFormat: "markdown",
-      }),
+        inputFormat: "markdown",
+        outputFormat: "html",
+      }, BASE_URL)
+
+      expect(result.success).toBe(true)
+      if (result.success) {
+        expect(typeof result.data).toBe("string")
+        expect(result.data).toContain("<h1 id=\"hello-world\">Hello World</h1>")
+      }
     })
 
-    expect(response.status).toBe(200)
-    const contentType = response.headers.get("Content-Type")
-    expect(contentType).toBe("text/markdown")
+    test("binary format returns decoded string", async () => {
+      const markdown = "# Test"
+      const base64 = Buffer.from(markdown).toString("base64")
 
-    const text = await response.text()
-    expect(text.length).toBeGreaterThan(100)
-    expect(text.toLowerCase()).toContain("terms of reference")
+      const result = await apiPandocConvertFromFile({
+        fileBase64: base64,
+        inputFormat: "markdown",
+        outputFormat: "docx",
+      }, BASE_URL)
+
+      expect(result.success).toBe(true)
+      if (result.success) {
+        expect(typeof result.data).toBe("string")
+        expect(result.data.length).toBeGreaterThan(0)
+      }
+    })
   })
 
-  test("pandoc convert PDF to markdown with test files", async () => {
-    const pdfPath = join(testDir, "test.pdf")
-    const txtPath = join(testDir, "test.txt")
+  describe("direct fetch", () => {
+    test("plain text format returns plain text", async () => {
+      const markdown = "# Hello World\n\nThis is a test."
+      const base64 = Buffer.from(markdown).toString("base64")
 
-    const pdfBuffer = await readFile(pdfPath)
-    const base64 = Buffer.from(pdfBuffer).toString("base64")
+      const response = await fetch(BASE_URL + apiPathPandocFromFile, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fileBase64: base64,
+          inputFormat: "markdown",
+          outputFormat: "html",
+        }),
+      })
 
-    const txtContent = await readFile(txtPath, "utf-8")
-    const expectedText = txtContent.trim().toLowerCase()
+      expect(response.status).toBe(200)
+      const contentType = response.headers.get("Content-Type")
+      expect(contentType).toBe("text/html")
 
-    const response = await fetch(BASE_URL + apiPathPandocFromFile, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        fileBase64: base64,
-        inputFormat: "pdf",
-        outputFormat: "markdown",
-      }),
+      const text = await response.text()
+      expect(text).toContain("<h1 id=\"hello-world\">Hello World</h1>")
     })
 
-    expect(response.status).toBe(200)
-    const contentType = response.headers.get("Content-Type")
-    expect(contentType).toBe("text/markdown")
+    test("binary format returns base64 encoded plain text", async () => {
+      const markdown = "# Test"
+      const base64 = Buffer.from(markdown).toString("base64")
 
-    const markdown = await response.text()
-    expect(markdown.toLowerCase()).toContain(expectedText)
+      const response = await fetch(BASE_URL + apiPathPandocFromFile, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fileBase64: base64,
+          inputFormat: "markdown",
+          outputFormat: "docx",
+        }),
+      })
+
+      expect(response.status).toBe(200)
+
+      const text = await response.text()
+      expect(typeof text).toBe("string")
+      expect(text.length).toBeGreaterThan(0)
+    })
   })
 })

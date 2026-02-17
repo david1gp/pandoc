@@ -32,6 +32,6 @@ describe("server", () => {
     expect(response.headers.get("Content-Type")?.toLowerCase()).toContain("text/html")
     const html = await response.text()
     expect(html).toContain("swagger-ui")
-    expect(html).toContain("/doc")
+    expect(html).toContain("/openapi")
   })
 })

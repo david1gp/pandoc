@@ -3,7 +3,7 @@ import { pandocHandlerFile } from "@/server/handlers/pandocHandlerFile"
 import { pandocHandlerUrl } from "@/server/handlers/pandocHandlerUrl"
 import { apiPathPandocFromFile } from "@client/apiPathPandocFromFile"
 import { apiPathPandocFromUrl } from "@client/apiPathPandocFromUrl"
-import { pandocResponseSchema } from "@client/pandocConvertResponseSchema"
+import { binaryFormats, plainTextFormats } from "@client/pandocFormatsText"
 import { pandocFromFileBodySchema } from "@client/pandocFromFileBodySchema"
 import { pandocFromUrlQuerySchema } from "@client/pandocFromUrlQuerySchema"
 import type { Hono } from "hono"
@@ -12,10 +12,20 @@ import * as a from "valibot"
 import { resultErrSchema } from "~utils/result/resultErrSchema"
 
 export function addRoutesPandoc(app: Hono<{ Bindings: Env }>) {
+  const plainTextFormatsDescription = `
+**Plain Text Formats** (returned as plain text):
+${plainTextFormats.join(", ")}
+
+**Binary Formats** (returned as base64 encoded plain text):
+${binaryFormats.join(", ")}
+`
+
   app.post(
     apiPathPandocFromUrl,
     describeRoute({
-      description: "Convert a document using Pandoc (from URL)",
+      description: `Convert a document using Pandoc (from URL)
+
+${plainTextFormatsDescription}`,
       tags: ["pandoc"],
       security: [],
       requestBody: {
@@ -25,10 +35,9 @@ export function addRoutesPandoc(app: Hono<{ Bindings: Env }>) {
       },
       responses: {
         200: {
-          description: "Conversion successful",
+          description: "Conversion successful - returns plain text or base64 encoded content",
           content: {
-            "text/markdown": { schema: resolver(a.string()) },
-            "application/json": { schema: resolver(pandocResponseSchema) as any },
+            "text/plain": { schema: resolver(a.string()) },
           },
         },
         400: {
@@ -48,14 +57,12 @@ export function addRoutesPandoc(app: Hono<{ Bindings: Env }>) {
     pandocHandlerUrl,
   )
 
-  const pandocConvertFileResponseSchema = a.object({
-    fileBase64: a.string(),
-  })
-
   app.put(
     apiPathPandocFromFile,
     describeRoute({
-      description: "Convert a document using Pandoc (from base64 file)",
+      description: `Convert a document using Pandoc (from base64 file)
+
+${plainTextFormatsDescription}`,
       tags: ["pandoc"],
       security: [],
       requestBody: {
@@ -65,10 +72,9 @@ export function addRoutesPandoc(app: Hono<{ Bindings: Env }>) {
       },
       responses: {
         200: {
-          description: "Conversion successful",
+          description: "Conversion successful - returns plain text or base64 encoded content",
           content: {
-            "text/markdown": { schema: resolver(a.string()) },
-            "application/json": { schema: resolver(pandocConvertFileResponseSchema) as any },
+            "text/plain": { schema: resolver(a.string()) },
           },
         },
         400: {

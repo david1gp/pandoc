@@ -9,7 +9,7 @@ export function addRoutesOpenapi(app: Hono<{ Bindings: Env }>) {
   const openApiOptions = {
     documentation: {
       info: {
-        title: "@adaptive-ds/pandoc - Document Conversion Service",
+        title: "@adaptive-ds/pandoc",
         version: packageVersion,
         description: `A document conversion service powered by Pandoc.
 
