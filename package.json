@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@adaptive-ds/utils": "^0.7.0",
+    "@hono/standard-validator": "^0.2.2",
     "@hono/swagger-ui": "^0.5.3",
     "@valibot/to-json-schema": "^1.5.0",
     "hono": "^4.11.7",

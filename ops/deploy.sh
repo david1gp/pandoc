@@ -9,15 +9,19 @@ echo "Creating directory ${REMOTE_DIR} on remote..."
 ssh ${REMOTE_USER}@${REMOTE_HOST} "mkdir -p ${REMOTE_DIR}"
 
 echo "Syncing source code to remote..."
-rsync -avz --exclude='.git' --exclude='dist' \
+rsync -avz --exclude='.git' --exclude='node_modules' --exclude='dist' \
 	${SOURCE_DIR}/ \
 	${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/
 
+echo "Installing dependencies on remote..."
+ssh ${REMOTE_USER}@${REMOTE_HOST} "cd ${REMOTE_DIR} && bun install"
+
 echo "Syncing scripts to remote..."
 rsync -avz \
-	${SCRIPT_DIR}/../scripts/start.sh \
-	${SCRIPT_DIR}/../scripts/stop.sh \
 	${SCRIPT_DIR}/../scripts/logs.sh \
+	${SCRIPT_DIR}/../scripts/start.sh \
+	${SCRIPT_DIR}/../scripts/status.sh \
+	${SCRIPT_DIR}/../scripts/stop.sh \
 	${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/
 
 echo "Setting ownership and permissions..."

@@ -2,4 +2,4 @@
 set -x
 set -e
 
-exec bun run start
+bun run start
