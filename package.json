@@ -3,6 +3,12 @@
   "version": "0.1.0",
   "scripts": {
     "dev": "bun run src/server/server.ts --hot",
+    "start": "bun run src/server/server.ts",
+    "init:user": "bash ops/setup/setup_01_create_user.sh",
+    "init:bun": "bash ops/setup/setup_02_install_bun.sh",
+    "init": "bun run init:user && bun run init:bun",
+    "deploy": "bash ops/deploy.sh",
+    "logs": "bash ops/scripts/logs.sh",
     "test": "bun test --preload ./test/setup.ts",
     "test:w": "bun test --preload ./test/setup.ts --watch",
     "tsc": "tsc --noEmit"

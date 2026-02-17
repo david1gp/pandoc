@@ -1,0 +1,15 @@
+[Unit]
+Description=Pandoc Server
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/home/pandoc
+ExecStart=/home/pandoc/start.sh
+ExecStop=/home/pandoc/stop.sh
+TimeoutStartSec=0
+
+[Install]
+WantedBy=default.target
