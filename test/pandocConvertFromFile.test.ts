@@ -23,7 +23,7 @@ describe("pandoc convert from file", () => {
       }
     })
 
-    test("binary format returns Uint8Array", async () => {
+    test("binary format returns Blob", async () => {
       const markdown = "# Test"
       const base64 = Buffer.from(markdown).toString("base64")
 
@@ -35,8 +35,8 @@ describe("pandoc convert from file", () => {
 
       expect(result.success).toBe(true)
       if (result.success) {
-        expect(result.data).toBeInstanceOf(Uint8Array)
-        expect(result.data.length).toBeGreaterThan(0)
+        expect(result.data).toBeInstanceOf(Blob)
+        expect(result.data.size).toBeGreaterThan(0)
       }
     })
   })

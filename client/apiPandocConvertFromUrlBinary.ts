@@ -1,12 +1,11 @@
 import { createError, createResult, type PromiseResult } from "~utils/result/Result"
-import { resultTryParsingFetchErr } from "~utils/result/resultTryParsingFetchErr"
 import { apiPathPandocFromUrl } from "./apiPathPandocFromUrl"
 import type { PandocFromUrlBinaryQueryType } from "./pandocFromUrlBinaryQuerySchema"
 
 export async function apiPandocConvertFromUrlBinary(
   args: PandocFromUrlBinaryQueryType,
   baseUrl: string,
-): PromiseResult<Uint8Array<ArrayBuffer>> {
+): PromiseResult<Blob> {
   const op = "apiPandocConvertFromUrlBinary"
 
   if (!baseUrl) {
@@ -25,11 +24,10 @@ export async function apiPandocConvertFromUrlBinary(
     body: bodyJson,
   })
 
-  const text = await response.text()
+  const blob = await response.blob()
   if (!response.ok) {
-    return resultTryParsingFetchErr(op, text, response.status, response.statusText)
+    return createError(op, response.statusText, String(response.status))
   }
 
-  const binaryData = Uint8Array.from(atob(text), (c) => c.charCodeAt(0))
-  return createResult(binaryData)
+  return createResult(blob)
 }
