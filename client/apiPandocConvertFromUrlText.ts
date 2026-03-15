@@ -1,5 +1,5 @@
-import { createError, createResult, type PromiseResult } from "~utils/result/Result"
-import { resultTryParsingFetchErr } from "~utils/result/resultTryParsingFetchErr"
+import { createError, createResult, type PromiseResult } from "~result"
+import { resultTryParsingFetchErr } from "~result/resultTryParsingFetchErr"
 import { apiPathPandocFromUrl } from "./apiPathPandocFromUrl"
 import type { PandocFromUrlTextQueryType } from "./pandocFromUrlTextQuerySchema"
 

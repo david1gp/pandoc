@@ -1,4 +1,4 @@
-import { createError, createResult, type PromiseResult } from "~utils/result/Result"
+import { createError, createResult, type PromiseResult } from "~result"
 import { apiPathPandocFromUrl } from "./apiPathPandocFromUrl"
 import type { PandocFromUrlBinaryQueryType } from "./pandocFromUrlBinaryQuerySchema"
 

@@ -4,7 +4,7 @@ import { isPandocInputFormat } from "@client/pandocFormatsOutput"
 import { pandocFromUrlBinaryQuerySchema } from "@client/pandocFromUrlBinaryQuerySchema"
 import { pandocFromUrlTextQuerySchema } from "@client/pandocFromUrlTextQuerySchema"
 import * as v from "valibot"
-import { createResultError } from "~utils/result/Result"
+import { createResultError } from "~result"
 import { handlePandocConversion } from "./pandocHandlerShared"
 
 const op = "pandocHandlerPost"

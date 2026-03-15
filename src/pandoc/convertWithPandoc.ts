@@ -1,6 +1,6 @@
 import { spawn } from "node:child_process"
 import { readFile } from "node:fs/promises"
-import { createResult, createResultError, type PromiseResult } from "~utils/result/Result"
+import { createResult, createResultError, type PromiseResult } from "~result"
 
 const op = "convertWithPandoc"
 

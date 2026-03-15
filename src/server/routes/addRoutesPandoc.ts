@@ -11,7 +11,7 @@ import { pandocFromUrlTextQuerySchema } from "@client/pandocFromUrlTextQuerySche
 import type { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import * as a from "valibot"
-import { resultErrSchema } from "~utils/result/resultErrSchema"
+import { resultErrSchema } from "~result/resultErrSchema"
 
 const pandocFromFileBodySchema = a.union([
   pandocFromFileTextBodySchema,

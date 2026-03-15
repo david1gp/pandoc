@@ -1,5 +1,5 @@
-import type { Result } from "~utils/result/Result"
-import { createResult, createResultError } from "~utils/result/Result"
+import type { Result } from "~result"
+import { createResult, createResultError } from "~result"
 import type { Env } from "@/env/Env"
 
 const op = "envTokenSecretResult"

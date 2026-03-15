@@ -1,4 +1,4 @@
-import { createResult, createResultError, type PromiseResult } from "~utils/result/Result"
+import { createResult, createResultError, type PromiseResult } from "~result"
 
 export async function downloadFileFromUrl(url: string): PromiseResult<{ content: Uint8Array; fileName: string }> {
   const op = "downloadFileFromUrl"

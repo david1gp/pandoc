@@ -3,7 +3,7 @@ import { packageVersion } from "@/env/packageVersion"
 import type { Hono } from "hono"
 import { describeRoute, openAPIRouteHandler, resolver } from "hono-openapi"
 import * as a from "valibot"
-import { resultErrSchema } from "~utils/result/resultErrSchema"
+import { resultErrSchema } from "~result/resultErrSchema"
 
 export function addRoutesOpenapi(app: Hono<{ Bindings: Env }>) {
   const openApiOptions = {

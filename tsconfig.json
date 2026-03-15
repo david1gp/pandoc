@@ -18,6 +18,8 @@
       "@/*": ["./src/*"],
       "@client/*": ["./client/*"],
       "~utils/*": ["./node_modules/@adaptive-ds/utils/dist/*"],
+      "~result": ["./node_modules/@adaptive-ds/result/dist/index.d.ts"],
+      "~result/*": ["./node_modules/@adaptive-ds/result/dist/*.d.ts"]
     },
     "erasableSyntaxOnly": true,
     "noUncheckedIndexedAccess": true,
