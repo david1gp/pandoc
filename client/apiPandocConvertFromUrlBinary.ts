@@ -1,4 +1,4 @@
-import { createError, createResult, type PromiseResult } from "~result"
+import { createError, createResult, type PromiseResult } from "@adaptive-ds/result"
 import { apiPathPandocFromUrl } from "./apiPathPandocFromUrl"
 import type { PandocFromUrlBinaryQueryType } from "./pandocFromUrlBinaryQuerySchema"
 

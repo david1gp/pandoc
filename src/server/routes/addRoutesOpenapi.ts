@@ -1,9 +1,9 @@
 import type { Env } from "@/env/Env"
 import { packageVersion } from "@/env/packageVersion"
+import { resultErrSchema } from "@adaptive-ds/result/resultErrSchema.js"
 import type { Hono } from "hono"
 import { describeRoute, openAPIRouteHandler, resolver } from "hono-openapi"
 import * as a from "valibot"
-import { resultErrSchema } from "~result/resultErrSchema"
 
 export function addRoutesOpenapi(app: Hono<{ Bindings: Env }>) {
   const openApiOptions = {

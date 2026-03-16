@@ -1,4 +1,4 @@
-import { createResult, createResultError, type PromiseResult } from "~result"
+import { createResult, createResultError, type PromiseResult } from "@adaptive-ds/result"
 
 export async function downloadFileFromUrl(url: string): PromiseResult<{ content: Uint8Array; fileName: string }> {
   const op = "downloadFileFromUrl"

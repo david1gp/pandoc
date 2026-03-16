@@ -2,7 +2,7 @@ import type { HonoContext } from "@/utils/HonoContext"
 import { pandocFromFileBinaryBodySchema } from "@client/pandocFromFileBinaryBodySchema"
 import { pandocFromFileTextBodySchema } from "@client/pandocFromFileTextBodySchema"
 import * as v from "valibot"
-import { createResultError } from "~result"
+import { createResultError } from "@adaptive-ds/result"
 import { handlePandocConversion } from "./pandocHandlerShared"
 
 const op = "pandocHandlerPut"

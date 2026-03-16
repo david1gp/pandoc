@@ -4,7 +4,7 @@ import { isPandocInputFormat, isPandocOutputFormat } from "@client/pandocFormats
 import { pandocFormatIsText } from "@client/pandocFormatsText"
 import { randomUUID } from "node:crypto"
 import { readFile, unlink, writeFile } from "node:fs/promises"
-import { createResultError } from "~result"
+import { createResultError } from "@adaptive-ds/result"
 
 const op = "pandocHandler"
 
