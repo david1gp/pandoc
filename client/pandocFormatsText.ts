@@ -1,4 +1,4 @@
-import { pandocFormatsOutputText, pandocFormatsOutputBinary } from "@client/pandocFormatsOutput"
+import { pandocFormatsOutputText, pandocFormatsOutputBinary } from "./pandocFormatsOutput"
 
 export const plainTextFormatsSet = new Set<string>([...pandocFormatsOutputText])
 

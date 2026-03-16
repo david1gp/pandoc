@@ -1,5 +1,5 @@
-import { pandocFormatsInputText } from "@client/pandocFormatsInput"
-import { pandocFormatsOutputText } from "@client/pandocFormatsOutput"
+import { pandocFormatsInputText } from "./pandocFormatsInput"
+import { pandocFormatsOutputText } from "./pandocFormatsOutput"
 import * as a from "valibot"
 
 
