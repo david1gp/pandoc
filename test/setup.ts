@@ -1,4 +1,4 @@
-import { serverPortBun } from "@/utils/serverPort"
+import { serverPortBun } from "../src/utils/serverPort"
 import { afterAll, beforeAll } from "bun:test"
 import { spawn, type ChildProcess } from "node:child_process"
 

@@ -1,6 +1,6 @@
 import type { Result } from "@adaptive-ds/result"
 import { createResult, createResultError } from "@adaptive-ds/result"
-import type { Env } from "@/env/Env"
+import type { Env } from "./Env"
 
 const op = "envTokenSecretResult"
 

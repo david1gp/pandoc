@@ -13,23 +13,16 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "types": ["bun-types"],
-    "paths": {
-      "@/*": ["./src/*"],
-      "@client/*": ["./client/*"],
-      "~utils/*": ["./node_modules/@adaptive-ds/utils/dist/*"],
-      "~result": ["./node_modules/@adaptive-ds/result/dist/index.js"],
-      "~result/*": ["./node_modules/@adaptive-ds/result/dist/*"]
-    },
-    "erasableSyntaxOnly": true,
-    "noUncheckedIndexedAccess": true,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "noImplicitAny": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitOverride": true
+    "types": ["bun-types"]
   },
+  "erasableSyntaxOnly": true,
+  "noUncheckedIndexedAccess": true,
+  "noUnusedLocals": false,
+  "noUnusedParameters": false,
+  "noImplicitAny": true,
+  "noImplicitReturns": true,
+  "noFallthroughCasesInSwitch": true,
+  "noImplicitOverride": true,
   "include": ["src/**/*", "test/**/*", "client/**/*"],
   "exclude": ["node_modules"]
 }

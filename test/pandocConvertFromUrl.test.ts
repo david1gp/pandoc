@@ -1,5 +1,5 @@
-import { apiPandocConvertFromUrlText } from "@client/apiPandocConvertFromUrlText"
-import { apiPathPandocFromUrl } from "@client/apiPathPandocFromUrl"
+import { apiPandocConvertFromUrlText } from "../client/apiPandocConvertFromUrlText"
+import { apiPathPandocFromUrl } from "../client/apiPathPandocFromUrl"
 import { describe, expect, test } from "bun:test"
 import { BASE_URL } from "./setup"
 

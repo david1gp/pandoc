@@ -1,6 +1,6 @@
-import { apiPandocConvertFromFileText } from "@client/apiPandocConvertFromFileText"
-import { apiPandocConvertFromFileBinary } from "@client/apiPandocConvertFromFileBinary"
-import { apiPathPandocFromFile } from "@client/apiPathPandocFromFile"
+import { apiPandocConvertFromFileText } from "../client/apiPandocConvertFromFileText"
+import { apiPandocConvertFromFileBinary } from "../client/apiPandocConvertFromFileBinary"
+import { apiPathPandocFromFile } from "../client/apiPathPandocFromFile"
 import { describe, expect, test } from "bun:test"
 import { BASE_URL } from "./setup"
 
