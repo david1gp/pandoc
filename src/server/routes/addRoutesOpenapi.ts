@@ -1,5 +1,5 @@
-import type { Env } from "../../env/Env"
-import { packageVersion } from "../../env/packageVersion"
+import type { Env } from "../../env/Env.js"
+import { packageVersion } from "../../env/packageVersion.js"
 import { resultErrSchema } from "@adaptive-ds/result/resultErrSchema.js"
 import type { Hono } from "hono"
 import { describeRoute, openAPIRouteHandler, resolver } from "hono-openapi"

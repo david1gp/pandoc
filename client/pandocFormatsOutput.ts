@@ -1,7 +1,7 @@
 import {
   pandocFormatsSharedText,
   pandocFormatsSharedBinary,
-} from "./pandocFormatsShared"
+} from "./pandocFormatsShared.js"
 
 const pandocFormatsOutputTextSpecific = [
   "ansi",
@@ -70,4 +70,4 @@ export const isPandocOutputFormat = (value: string): value is PandocOutputFormat
   return (pandocOutputFormats as readonly string[]).includes(value)
 }
 
-export { isPandocInputFormat } from "./pandocFormatsInput"
+export { isPandocInputFormat } from "./pandocFormatsInput.js"

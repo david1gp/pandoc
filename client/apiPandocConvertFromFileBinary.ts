@@ -1,6 +1,6 @@
 import { createError, createResult, type PromiseResult } from "@adaptive-ds/result"
-import { apiPathPandocFromFile } from "./apiPathPandocFromFile"
-import type { PandocFromFileBinaryBodyType } from "./pandocFromFileBinaryBodySchema"
+import { apiPathPandocFromFile } from "./apiPathPandocFromFile.js"
+import type { PandocFromFileBinaryBodyType } from "./pandocFromFileBinaryBodySchema.js"
 
 export async function apiPandocConvertFromFileBinary(
   args: PandocFromFileBinaryBodyType,

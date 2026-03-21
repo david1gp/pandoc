@@ -1,7 +1,7 @@
-import { apiPandocConvertFromUrlText } from "../client/apiPandocConvertFromUrlText"
-import { apiPathPandocFromUrl } from "../client/apiPathPandocFromUrl"
+import { apiPandocConvertFromUrlText } from "../client/apiPandocConvertFromUrlText.js"
+import { apiPathPandocFromUrl } from "../client/apiPathPandocFromUrl.js"
 import { describe, expect, test } from "bun:test"
-import { BASE_URL } from "./setup"
+import { BASE_URL } from "./setup.js"
 
 describe("pandoc convert from url", () => {
   describe("client library", () => {

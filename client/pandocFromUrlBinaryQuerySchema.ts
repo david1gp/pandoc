@@ -1,5 +1,5 @@
-import { pandocInputFormats } from "./pandocFormatsInput"
-import { pandocFormatsOutputBinary } from "./pandocFormatsOutput"
+import { pandocInputFormats } from "./pandocFormatsInput.js"
+import { pandocFormatsOutputBinary } from "./pandocFormatsOutput.js"
 import * as a from "valibot"
 
 

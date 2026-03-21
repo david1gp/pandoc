@@ -1,6 +1,6 @@
 import { createError, createResult, type PromiseResult } from "@adaptive-ds/result"
-import { apiPathPandocFromUrl } from "./apiPathPandocFromUrl"
-import type { PandocFromUrlBinaryQueryType } from "./pandocFromUrlBinaryQuerySchema"
+import { apiPathPandocFromUrl } from "./apiPathPandocFromUrl.js"
+import type { PandocFromUrlBinaryQueryType } from "./pandocFromUrlBinaryQuerySchema.js"
 
 export async function apiPandocConvertFromUrlBinary(
   args: PandocFromUrlBinaryQueryType,

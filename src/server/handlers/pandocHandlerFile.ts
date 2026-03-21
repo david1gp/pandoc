@@ -1,9 +1,9 @@
-import type { HonoContext } from "../../utils/HonoContext"
-import { pandocFromFileBinaryBodySchema } from "../../../client/pandocFromFileBinaryBodySchema"
-import { pandocFromFileTextBodySchema } from "../../../client/pandocFromFileTextBodySchema"
+import type { HonoContext } from "../../utils/HonoContext.js"
+import { pandocFromFileBinaryBodySchema } from "../../../client/pandocFromFileBinaryBodySchema.js"
+import { pandocFromFileTextBodySchema } from "../../../client/pandocFromFileTextBodySchema.js"
 import * as v from "valibot"
 import { createResultError } from "@adaptive-ds/result"
-import { handlePandocConversion } from "./pandocHandlerShared"
+import { handlePandocConversion } from "./pandocHandlerShared.js"
 
 const op = "pandocHandlerPut"
 

@@ -1,11 +1,11 @@
-import { downloadFileFromUrl } from "../../utils/downloadFileFromUrl"
-import type { HonoContext } from "../../utils/HonoContext"
-import { isPandocInputFormat } from "../../../client/pandocFormatsOutput"
-import { pandocFromUrlBinaryQuerySchema } from "../../../client/pandocFromUrlBinaryQuerySchema"
-import { pandocFromUrlTextQuerySchema } from "../../../client/pandocFromUrlTextQuerySchema"
+import { downloadFileFromUrl } from "../../utils/downloadFileFromUrl.js"
+import type { HonoContext } from "../../utils/HonoContext.js"
+import { isPandocInputFormat } from "../../../client/pandocFormatsOutput.js"
+import { pandocFromUrlBinaryQuerySchema } from "../../../client/pandocFromUrlBinaryQuerySchema.js"
+import { pandocFromUrlTextQuerySchema } from "../../../client/pandocFromUrlTextQuerySchema.js"
 import * as v from "valibot"
 import { createResultError } from "@adaptive-ds/result"
-import { handlePandocConversion } from "./pandocHandlerShared"
+import { handlePandocConversion } from "./pandocHandlerShared.js"
 
 const op = "pandocHandlerPost"
 

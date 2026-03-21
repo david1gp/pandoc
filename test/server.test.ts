@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test"
-import { BASE_URL } from "./setup"
+import { BASE_URL } from "./setup.js"
 
 describe("server", () => {
   test("health", async () => {

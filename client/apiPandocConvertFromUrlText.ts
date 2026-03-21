@@ -1,7 +1,7 @@
 import { createError, createResult, type PromiseResult } from "@adaptive-ds/result"
 import { resultTryParsingFetchErr } from "@adaptive-ds/result/resultTryParsingFetchErr.js"
-import { apiPathPandocFromUrl } from "./apiPathPandocFromUrl"
-import type { PandocFromUrlTextQueryType } from "./pandocFromUrlTextQuerySchema"
+import { apiPathPandocFromUrl } from "./apiPathPandocFromUrl.js"
+import type { PandocFromUrlTextQueryType } from "./pandocFromUrlTextQuerySchema.js"
 
 export async function apiPandocConvertFromUrlText(
   args: PandocFromUrlTextQueryType,

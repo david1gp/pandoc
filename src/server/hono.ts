@@ -1,7 +1,7 @@
-import type { Env } from "../env/Env"
-import { addRoutesOpenapi } from "./routes/addRoutesOpenapi"
-import { addRoutesPandoc } from "./routes/addRoutesPandoc"
-import { addRoutesServer } from "./routes/addRoutesServer"
+import type { Env } from "../env/Env.js"
+import { addRoutesOpenapi } from "./routes/addRoutesOpenapi.js"
+import { addRoutesPandoc } from "./routes/addRoutesPandoc.js"
+import { addRoutesServer } from "./routes/addRoutesServer.js"
 import { Hono } from "hono"
 import { serveStatic } from "hono/bun"
 

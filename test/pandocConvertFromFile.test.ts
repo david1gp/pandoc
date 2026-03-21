@@ -1,8 +1,8 @@
-import { apiPandocConvertFromFileText } from "../client/apiPandocConvertFromFileText"
-import { apiPandocConvertFromFileBinary } from "../client/apiPandocConvertFromFileBinary"
-import { apiPathPandocFromFile } from "../client/apiPathPandocFromFile"
+import { apiPandocConvertFromFileText } from "../client/apiPandocConvertFromFileText.js"
+import { apiPandocConvertFromFileBinary } from "../client/apiPandocConvertFromFileBinary.js"
+import { apiPathPandocFromFile } from "../client/apiPathPandocFromFile.js"
 import { describe, expect, test } from "bun:test"
-import { BASE_URL } from "./setup"
+import { BASE_URL } from "./setup.js"
 
 describe("pandoc convert from file", () => {
   describe("client library", () => {

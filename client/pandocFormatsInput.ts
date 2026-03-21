@@ -1,7 +1,7 @@
 import {
   pandocFormatsSharedText,
   pandocFormatsSharedBinary,
-} from "./pandocFormatsShared"
+} from "./pandocFormatsShared.js"
 
 const pandocFormatsInputTextSpecific = [
   "asciidoc",
