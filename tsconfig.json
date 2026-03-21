@@ -1,28 +1,77 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "lib": ["ES2022"],
-    "strict": true,
+    "target": "esnext",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "allowImportingTsExtensions": false,
+    "resolveJsonModule": true,
+    "noEmit": true,
+    //
+    // dom
+    //
+    "lib": [
+      "esnext"
+    ],
+    "types": ["bun"],
+    //
+    // performance
+    //
+    "isolatedModules": true,
     "skipLibCheck": true,
+    "incremental": true,
+    "tsBuildInfoFile": "./build/tsconfig.tsbuildinfo",
+    //
+    // my configs
+    //
+    "allowJs": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
-    "types": ["bun-types"]
+    "useDefineForClassFields": true,
+    "downlevelIteration": true,
+    "baseUrl": ".",
+    "moduleDetection": "force",
+    "noUncheckedSideEffectImports": true,
+    //
+    // type imports - https://www.typescriptlang.org/tsconfig#verbatimModuleSyntax
+    //
+    "verbatimModuleSyntax": true,
+    //
+    // https://devblogs.microsoft.com/typescript/announcing-typescript-5-8/#the---erasablesyntaxonly-option
+    //
+    "erasableSyntaxOnly": true,
+    //
+    // code quality settings
+    //
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true
   },
-  "erasableSyntaxOnly": true,
-  "noUncheckedIndexedAccess": true,
-  "noUnusedLocals": false,
-  "noUnusedParameters": false,
-  "noImplicitAny": true,
-  "noImplicitReturns": true,
-  "noFallthroughCasesInSwitch": true,
-  "noImplicitOverride": true,
-  "include": ["src/**/*", "test/**/*", "client/**/*"],
-  "exclude": ["node_modules"]
+  "include": [
+    "client",
+    "src",
+    "test"
+  ],
+  "exclude": [
+    ".github",
+    ".roo",
+    ".idea",
+    ".vscode",
+    ".wrangler",
+    "changelogs",
+    "build",
+    "dist",
+    "out",
+    "data",
+    "docs",
+    "node_modules",
+    "ops",
+    "public",
+    "public-image-versions",
+    "public-images"
+  ],
 }
