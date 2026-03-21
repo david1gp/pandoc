@@ -6,15 +6,8 @@
     "declaration": true,
     "declarationMap": true,
     "noEmit": false,
-    "allowImportingTsExtensions": false
+    "incremental": false,
   },
-  "include": [
-    "./client/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "src",
-    "test"
-  ]
+  "include": ["./client/**/*"],
+  "exclude": ["node_modules", "dist", "src", "test"],
 }
