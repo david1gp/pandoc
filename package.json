@@ -54,7 +54,10 @@
   },
   "license": "MIT",
   "exports": {
-    "./*": "./dist/*"
+    "./*.js": {
+      "types": "./dist/*.d.ts",
+      "import": "./dist/*.js"
+    }
   },
   "files": [
     "dist"
