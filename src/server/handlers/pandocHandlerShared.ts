@@ -2,11 +2,13 @@ import { convertWithPandoc } from "../../pandoc/convertWithPandoc.js"
 import type { HonoContext } from "../../utils/HonoContext.js"
 import { isPandocInputFormat, isPandocOutputFormat } from "../../../client/pandocFormatsOutput.js"
 import { pandocFormatIsText } from "../../../client/pandocFormatsText.js"
-import { randomUUID } from "node:crypto"
-import { readFile, unlink, writeFile } from "node:fs/promises"
+import { createHash } from "node:crypto"
+import { mkdir } from "node:fs/promises"
+import { join } from "node:path"
 import { createResultError } from "@adaptive-ds/result"
 
 const op = "pandocHandler"
+const tempFileDirectory = "/tmp/adaptive-pandoc"
 
 export async function handlePandocConversion(
   c: HonoContext,
@@ -24,35 +26,32 @@ export async function handlePandocConversion(
     return c.json(error, 400)
   }
 
-  let inputFilePath: string | null = null
-  let outputFilePath: string | null = null
+  let inputPath: string | null = null
+  let outputPath: string | null = null
 
   try {
-    const now = new Date()
-    const datePrefix = now.toISOString().split("T")[0]!
-    const sharedUuid = randomUUID()
-    const outputExt = outputFormat === "markdown" ? "md" : outputFormat
+    await mkdir(tempFileDirectory, { recursive: true })
+    const hash = createHash("sha256").update(fileContent).digest("hex")
+    inputPath = join(tempFileDirectory, `${hash}.${pandocFormatToExtension(inputFormat)}`)
+    outputPath = join(tempFileDirectory, `${hash}.${pandocFormatToExtension(outputFormat)}`)
 
-    inputFilePath = `/tmp/${datePrefix}_${sharedUuid}-in.${inputFormat}`
-    await writeFile(inputFilePath, fileContent)
+    await Bun.write(inputPath, fileContent)
 
-    outputFilePath = `/tmp/${datePrefix}_${sharedUuid}-out.${outputExt}`
-
-    const conversionResult = await convertWithPandoc(inputFilePath, inputFormat, outputFilePath, outputFormat)
+    const conversionResult = await convertWithPandoc(inputPath, inputFormat, outputPath, outputFormat)
     if (!conversionResult.success) {
       const error = createResultError(op, conversionResult.errorMessage)
       return c.json(error, 500)
     }
 
     if (pandocFormatIsText(outputFormat)) {
-      const outputContent = await readFile(outputFilePath, "utf-8")
+      const outputContent = await Bun.file(outputPath).text()
       return new Response(outputContent, {
         headers: { "Content-Type": getSpecificTextContentType(outputFormat) },
       })
     }
 
-    const fileContentResult = await readFile(outputFilePath)
-    const base64 = btoa(String.fromCharCode(...fileContentResult))
+    const outputBytes = await Bun.file(outputPath).arrayBuffer()
+    const base64 = Buffer.from(outputBytes).toString("base64")
     return new Response(base64, {
       headers: { "Content-Type": "text/plain" },
     })
@@ -60,16 +59,17 @@ export async function handlePandocConversion(
     const error = createResultError(op, e instanceof Error ? e.message : "Unknown error")
     return c.json(error, 500)
   } finally {
-    if (inputFilePath) {
+    if (inputPath) {
       try {
-        await unlink(inputFilePath)
+        await Bun.file(inputPath).delete()
       } catch {
         /* ignore */
       }
     }
-    if (outputFilePath) {
+
+    if (outputPath) {
       try {
-        await unlink(outputFilePath)
+        await Bun.file(outputPath).delete()
       } catch {
         /* ignore */
       }
@@ -89,3 +89,7 @@ const specificTextContentType: Record<string, string> = {
 } as const
 
 const getSpecificTextContentType = (format: string): string => specificTextContentType[format] ?? "text/plain"
+
+function pandocFormatToExtension(format: string): string {
+  return format === "markdown" ? "md" : format
+}

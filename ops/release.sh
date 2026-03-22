@@ -63,10 +63,14 @@ echo "📄 Changelog saved to: $CHANGELOG_FILE"
 # --- Step 4: Review changelog ---
 echo "📄 Review the generated changelog:"
 cat "$CHANGELOG_FILE"
-read -p "✅ Proceed with publishing? (y/N): " CONFIRM
-if [[ "$CONFIRM" != "y" && "$CONFIRM" != "Y" ]]; then
-  echo "❌ Aborted by user."
-  exit 1
+if [ $# -eq 0 ]; then
+  read -p "✅ Proceed with publishing? (y/N): " CONFIRM
+  if [[ "$CONFIRM" != "y" && "$CONFIRM" != "Y" ]]; then
+    echo "❌ Aborted by user."
+    exit 1
+  fi
+else
+  echo "⏭️ Skipping manual confirmation because version was provided as an argument."
 fi
 
 # --- Step 5: Build ---
