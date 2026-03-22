@@ -2,6 +2,7 @@ import { apiPandocConvertFromFileText } from "../client/apiPandocConvertFromFile
 import { apiPandocConvertFromFileBinary } from "../client/apiPandocConvertFromFileBinary.js"
 import { apiPathPandocFromFile } from "../client/apiPathPandocFromFile.js"
 import { describe, expect, test } from "bun:test"
+import { readFileSync } from "node:fs"
 import { BASE_URL } from "./setup.js"
 
 describe("pandoc convert from file", () => {
@@ -64,6 +65,21 @@ describe("pandoc convert from file", () => {
       expect(markdownResult.success).toBe(true)
       if (markdownResult.success) {
         expect(markdownResult.data.toLowerCase()).toContain("binary input")
+      }
+    })
+
+    test("pdf input falls back to pdftotext before markdown conversion", async () => {
+      const pdfBase64 = readFileSync(new URL("./test.pdf", import.meta.url)).toString("base64")
+
+      const result = await apiPandocConvertFromFileText({
+        fileBase64: pdfBase64,
+        inputFormat: "pdf",
+        outputFormat: "markdown",
+      }, BASE_URL)
+
+      expect(result.success).toBe(true)
+      if (result.success) {
+        expect(result.data.toLowerCase()).toContain("text")
       }
     })
   })

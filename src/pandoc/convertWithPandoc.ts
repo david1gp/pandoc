@@ -10,10 +10,21 @@ export async function convertWithPandoc(
   outputPath: string,
   outputFormat: string,
 ): PromiseResult<string> {
-  let effectiveInputFormat: string | undefined = inputFormat || undefined
+  const pdfPreprocessResult = inputFormat === "pdf"
+    ? await convertPdfToTextFile(inputPath)
+    : createResult<{ inputPath: string; inputFormat: string | undefined }>({
+      inputPath,
+      inputFormat: inputFormat || undefined,
+    })
+  if (!pdfPreprocessResult.success) {
+    return pdfPreprocessResult
+  }
+
+  const effectiveInputPath = pdfPreprocessResult.data.inputPath
+  const effectiveInputFormat = pdfPreprocessResult.data.inputFormat
 
   return new Promise((resolve) => {
-    const args = [inputPath, "-o", outputPath]
+    const args = [effectiveInputPath, "-o", outputPath]
     if (effectiveInputFormat) {
       args.push("-f", effectiveInputFormat)
     }
@@ -43,6 +54,37 @@ export async function convertWithPandoc(
     })
 
     pandoc.on("error", (e) => {
+      resolve(createResultError(op, e.message))
+    })
+  })
+}
+
+async function convertPdfToTextFile(
+  inputPath: string,
+): PromiseResult<{ inputPath: string; inputFormat: undefined }> {
+  const textPath = `${inputPath}.txt`
+
+  return new Promise((resolve) => {
+    const pdftotext = spawn("pdftotext", [inputPath, textPath])
+    let stderr = ""
+
+    pdftotext.stderr.on("data", (data) => {
+      stderr += data.toString()
+    })
+
+    pdftotext.on("close", (code) => {
+      if (code !== 0) {
+        resolve(createResultError(op, `pdftotext exited with code ${code}: ${stderr}`))
+        return
+      }
+
+      resolve(createResult({
+        inputPath: textPath,
+        inputFormat: undefined,
+      }))
+    })
+
+    pdftotext.on("error", (e) => {
       resolve(createResultError(op, e.message))
     })
   })

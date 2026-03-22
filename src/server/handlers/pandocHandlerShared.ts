@@ -28,12 +28,14 @@ export async function handlePandocConversion(
 
   let inputPath: string | null = null
   let outputPath: string | null = null
+  let pdfTextFallbackPath: string | null = null
 
   try {
     await mkdir(tempFileDirectory, { recursive: true })
     const hash = createHash("sha256").update(fileContent).digest("hex")
     inputPath = join(tempFileDirectory, `${hash}.${pandocFormatToExtension(inputFormat)}`)
     outputPath = join(tempFileDirectory, `${hash}.${pandocFormatToExtension(outputFormat)}`)
+    pdfTextFallbackPath = inputFormat === "pdf" ? `${inputPath}.txt` : null
 
     await Bun.write(inputPath, fileContent)
 
@@ -70,6 +72,14 @@ export async function handlePandocConversion(
     if (outputPath) {
       try {
         await Bun.file(outputPath).delete()
+      } catch {
+        /* ignore */
+      }
+    }
+
+    if (pdfTextFallbackPath) {
+      try {
+        await Bun.file(pdfTextFallbackPath).delete()
       } catch {
         /* ignore */
       }
