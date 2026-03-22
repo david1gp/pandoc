@@ -39,6 +39,33 @@ describe("pandoc convert from file", () => {
         expect(result.data.size).toBeGreaterThan(0)
       }
     })
+
+    test("binary input can return text", async () => {
+      const markdown = "# Binary Input\n\nThis document should round-trip through docx."
+      const inputBase64 = Buffer.from(markdown).toString("base64")
+
+      const docxResult = await apiPandocConvertFromFileBinary({
+        fileBase64: inputBase64,
+        inputFormat: "markdown",
+        outputFormat: "docx",
+      }, BASE_URL)
+
+      expect(docxResult.success).toBe(true)
+      if (!docxResult.success) return
+
+      const docxBase64 = await docxResult.data.text()
+
+      const markdownResult = await apiPandocConvertFromFileText({
+        fileBase64: docxBase64,
+        inputFormat: "docx",
+        outputFormat: "markdown",
+      }, BASE_URL)
+
+      expect(markdownResult.success).toBe(true)
+      if (markdownResult.success) {
+        expect(markdownResult.data.toLowerCase()).toContain("binary input")
+      }
+    })
   })
 
   describe("direct fetch", () => {
