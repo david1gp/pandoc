@@ -15,14 +15,14 @@ jobs:
       - uses: actions/checkout@v4
 
       # Setup Bun for installation, building, and testing
-      - uses: oven-sh/setup-bun@v1
+      - uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
 
       # Setup Node.js only for npm publishing with OIDC until Bun adds support for it - https://github.com/oven-sh/bun/issues/15601
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
           registry-url: 'https://registry.npmjs.org'
 
       # Use Bun for everything except publishing
