@@ -1,6 +1,6 @@
-import { serverPortBun } from "../src/utils/serverPort.js"
 import { afterAll, beforeAll } from "bun:test"
-import { spawn, type ChildProcess } from "node:child_process"
+import { type ChildProcess, spawn } from "node:child_process"
+import { serverPortBun } from "../src/utils/serverPort.js"
 
 const BASE_URL = `http://localhost:${serverPortBun}`
 const HEALTH_URL = BASE_URL + "/health"
@@ -10,7 +10,9 @@ let didStartServer = false
 
 async function isServerRunning(): Promise<boolean> {
   try {
-    const response = await fetch(HEALTH_URL, { signal: AbortSignal.timeout(1500) })
+    const response = await fetch(HEALTH_URL, {
+      signal: AbortSignal.timeout(1500),
+    })
     return response.ok
   } catch {
     return false

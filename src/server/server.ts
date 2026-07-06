@@ -1,6 +1,6 @@
 import { serverPortBun } from "../utils/serverPort.js"
-import { createApp } from "./hono.js"
 import { setHeaderTimingSingleValue } from "./headers/setHeaderTimingSingleValue.js"
+import { createApp } from "./hono.js"
 
 const app = createApp()
 

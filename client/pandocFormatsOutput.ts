@@ -1,7 +1,4 @@
-import {
-  pandocFormatsSharedText,
-  pandocFormatsSharedBinary,
-} from "./pandocFormatsShared.js"
+import { pandocFormatsSharedBinary, pandocFormatsSharedText } from "./pandocFormatsShared.js"
 
 const pandocFormatsOutputTextSpecific = [
   "ansi",
@@ -31,10 +28,7 @@ const pandocFormatsOutputTextSpecific = [
   "zimwiki",
 ] as const
 
-export const pandocFormatsOutputText = [
-  ...pandocFormatsSharedText,
-  ...pandocFormatsOutputTextSpecific,
-] as const
+export const pandocFormatsOutputText = [...pandocFormatsSharedText, ...pandocFormatsOutputTextSpecific] as const
 
 export type PandocFormatOutputText = (typeof pandocFormatsOutputText)[number]
 
@@ -52,17 +46,11 @@ const pandocFormatsOutputBinarySpecific = [
   "typst",
 ] as const
 
-export const pandocFormatsOutputBinary = [
-  ...pandocFormatsSharedBinary,
-  ...pandocFormatsOutputBinarySpecific,
-] as const
+export const pandocFormatsOutputBinary = [...pandocFormatsSharedBinary, ...pandocFormatsOutputBinarySpecific] as const
 
 export type PandocFormatOutputBinary = (typeof pandocFormatsOutputBinary)[number]
 
-export const pandocOutputFormats = [
-  ...pandocFormatsOutputText,
-  ...pandocFormatsOutputBinary,
-] as const
+export const pandocOutputFormats = [...pandocFormatsOutputText, ...pandocFormatsOutputBinary] as const
 
 export type PandocOutputFormat = (typeof pandocOutputFormats)[number]
 

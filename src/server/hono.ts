@@ -1,9 +1,9 @@
+import { Hono } from "hono"
+import { serveStatic } from "hono/bun"
 import type { Env } from "../env/Env.js"
 import { addRoutesOpenapi } from "./routes/addRoutesOpenapi.js"
 import { addRoutesPandoc } from "./routes/addRoutesPandoc.js"
 import { addRoutesServer } from "./routes/addRoutesServer.js"
-import { Hono } from "hono"
-import { serveStatic } from "hono/bun"
 
 export function createApp(): Hono<{ Bindings: Env }> {
   const app = new Hono<{ Bindings: Env }>()

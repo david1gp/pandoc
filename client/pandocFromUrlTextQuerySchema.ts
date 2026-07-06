@@ -1,12 +1,11 @@
+import * as a from "valibot"
 import { pandocFormatsInputText } from "./pandocFormatsInput.js"
 import { pandocFormatsOutputText } from "./pandocFormatsOutput.js"
-import * as a from "valibot"
-
 
 export const pandocFromUrlTextQuerySchema = a.object({
   url: a.pipe(a.string(), a.description("URL of the text document to convert")),
   inputFormat: a.optional(
-    a.pipe(a.picklist(pandocFormatsInputText), a.description("Input text format (e.g., markdown, html)"))
+    a.pipe(a.picklist(pandocFormatsInputText), a.description("Input text format (e.g., markdown, html)")),
   ),
   outputFormat: a.pipe(a.picklist(pandocFormatsOutputText), a.description("Output text format (e.g., html, markdown)")),
 })

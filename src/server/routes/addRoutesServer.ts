@@ -1,9 +1,9 @@
-import type { Env } from "../../env/Env.js"
-import { packageVersion } from "../../env/packageVersion.js"
-import type { HonoContext } from "../../utils/HonoContext.js"
 import type { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import * as a from "valibot"
+import type { Env } from "../../env/Env.js"
+import { packageVersion } from "../../env/packageVersion.js"
+import type { HonoContext } from "../../utils/HonoContext.js"
 
 export function addRoutesServer(app: Hono<{ Bindings: Env }>) {
   app.get(

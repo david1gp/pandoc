@@ -1,7 +1,4 @@
-import {
-  pandocFormatsSharedText,
-  pandocFormatsSharedBinary,
-} from "./pandocFormatsShared.js"
+import { pandocFormatsSharedBinary, pandocFormatsSharedText } from "./pandocFormatsShared.js"
 
 const pandocFormatsInputTextSpecific = [
   "asciidoc",
@@ -22,26 +19,17 @@ const pandocFormatsInputTextSpecific = [
   "xml",
 ] as const
 
-export const pandocFormatsInputText = [
-  ...pandocFormatsSharedText,
-  ...pandocFormatsInputTextSpecific,
-] as const
+export const pandocFormatsInputText = [...pandocFormatsSharedText, ...pandocFormatsInputTextSpecific] as const
 
 export type PandocFormatInputText = (typeof pandocFormatsInputText)[number]
 
 const pandocFormatsInputBinarySpecific = [] as const
 
-export const pandocFormatsInputBinary = [
-  ...pandocFormatsSharedBinary,
-  ...pandocFormatsInputBinarySpecific,
-] as const
+export const pandocFormatsInputBinary = [...pandocFormatsSharedBinary, ...pandocFormatsInputBinarySpecific] as const
 
 export type PandocFormatInputBinary = (typeof pandocFormatsInputBinary)[number]
 
-export const pandocInputFormats = [
-  ...pandocFormatsInputText,
-  ...pandocFormatsInputBinary,
-] as const
+export const pandocInputFormats = [...pandocFormatsInputText, ...pandocFormatsInputBinary] as const
 
 export type PandocInputFormat = (typeof pandocInputFormats)[number]
 

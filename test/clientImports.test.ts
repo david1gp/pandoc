@@ -75,14 +75,9 @@ test("client dir must not import from @ (src) or relative paths outside client",
   expect(violations).toHaveLength(0)
 })
 
-const EXAMPLES_INVALID_RELATIVE = [
-  `import { bar } from "../src/api"`,
-  `import { foo } from "../../src/utils"`,
-]
+const EXAMPLES_INVALID_RELATIVE = [`import { bar } from "../src/api"`, `import { foo } from "../../src/utils"`]
 
-const EXAMPLES_INVALID_ABSOLUTE = [
-  `import { qux } from "@/components/Button"`,
-]
+const EXAMPLES_INVALID_ABSOLUTE = [`import { qux } from "@/components/Button"`]
 
 test("regex correctly identifies invalid relative .. imports (negative test)", () => {
   for (const example of EXAMPLES_INVALID_RELATIVE) {

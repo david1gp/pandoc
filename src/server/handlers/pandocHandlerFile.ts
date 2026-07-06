@@ -1,16 +1,13 @@
-import type { HonoContext } from "../../utils/HonoContext.js"
+import { createResultError } from "@adaptive-ds/result"
+import * as v from "valibot"
 import { pandocFromFileBinaryBodySchema } from "../../../client/pandocFromFileBinaryBodySchema.js"
 import { pandocFromFileTextBodySchema } from "../../../client/pandocFromFileTextBodySchema.js"
-import * as v from "valibot"
-import { createResultError } from "@adaptive-ds/result"
+import type { HonoContext } from "../../utils/HonoContext.js"
 import { handlePandocConversion } from "./pandocHandlerShared.js"
 
 const op = "pandocHandlerPut"
 
-const pandocFromFileBodySchema = v.union([
-  pandocFromFileTextBodySchema,
-  pandocFromFileBinaryBodySchema,
-])
+const pandocFromFileBodySchema = v.union([pandocFromFileTextBodySchema, pandocFromFileBinaryBodySchema])
 
 export async function pandocHandlerFile(c: HonoContext): Promise<Response> {
   const jsonText = await c.req.text()

@@ -1,7 +1,7 @@
-import type { Env } from "../../env/Env.js"
-import { pandocHandlerFile } from "../handlers/pandocHandlerFile.js"
-import { pandocHandlerUrl } from "../handlers/pandocHandlerUrl.js"
 import { resultErrSchema } from "@adaptive-ds/result/resultErrSchema.js"
+import type { Hono } from "hono"
+import { describeRoute, resolver } from "hono-openapi"
+import * as a from "valibot"
 import { apiPathPandocFromFile } from "../../../client/apiPathPandocFromFile.js"
 import { apiPathPandocFromUrl } from "../../../client/apiPathPandocFromUrl.js"
 import { binaryFormats, plainTextFormats } from "../../../client/pandocFormatsText.js"
@@ -9,9 +9,9 @@ import { pandocFromFileBinaryBodySchema } from "../../../client/pandocFromFileBi
 import { pandocFromFileTextBodySchema } from "../../../client/pandocFromFileTextBodySchema.js"
 import { pandocFromUrlBinaryQuerySchema } from "../../../client/pandocFromUrlBinaryQuerySchema.js"
 import { pandocFromUrlTextQuerySchema } from "../../../client/pandocFromUrlTextQuerySchema.js"
-import type { Hono } from "hono"
-import { describeRoute, resolver } from "hono-openapi"
-import * as a from "valibot"
+import type { Env } from "../../env/Env.js"
+import { pandocHandlerFile } from "../handlers/pandocHandlerFile.js"
+import { pandocHandlerUrl } from "../handlers/pandocHandlerUrl.js"
 
 const pandocFromFileBodySchema = a.union([pandocFromFileTextBodySchema, pandocFromFileBinaryBodySchema])
 
@@ -36,7 +36,9 @@ ${plainTextFormatsDescription}`,
       security: [],
       requestBody: {
         content: {
-          "application/json": { schema: resolver(pandocFromUrlQuerySchema) as any },
+          "application/json": {
+            schema: resolver(pandocFromUrlQuerySchema) as any,
+          },
         },
       },
       responses: {
@@ -73,7 +75,9 @@ ${plainTextFormatsDescription}`,
       security: [],
       requestBody: {
         content: {
-          "application/json": { schema: resolver(pandocFromFileBodySchema) as any },
+          "application/json": {
+            schema: resolver(pandocFromFileBodySchema) as any,
+          },
         },
       },
       responses: {

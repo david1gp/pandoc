@@ -36,21 +36,10 @@ export const pandocFormatsSharedText = [
 
 export type PandocFormatSharedText = (typeof pandocFormatsSharedText)[number]
 
-export const pandocFormatsSharedBinary = [
-  "docx",
-  "epub",
-  "epub2",
-  "epub3",
-  "fb2",
-  "odt",
-  "pdf",
-] as const
+export const pandocFormatsSharedBinary = ["docx", "epub", "epub2", "epub3", "fb2", "odt", "pdf"] as const
 
 export type PandocFormatSharedBinary = (typeof pandocFormatsSharedBinary)[number]
 
-export const pandocFormatsShared = [
-  ...pandocFormatsSharedText,
-  ...pandocFormatsSharedBinary,
-] as const
+export const pandocFormatsShared = [...pandocFormatsSharedText, ...pandocFormatsSharedBinary] as const
 
 export type PandocFormatShared = (typeof pandocFormatsShared)[number]

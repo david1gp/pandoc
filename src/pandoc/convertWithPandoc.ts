@@ -10,12 +10,13 @@ export async function convertWithPandoc(
   outputPath: string,
   outputFormat: string,
 ): PromiseResult<string> {
-  const pdfPreprocessResult = inputFormat === "pdf"
-    ? await convertPdfToTextFile(inputPath)
-    : createResult<{ inputPath: string; inputFormat: string | undefined }>({
-      inputPath,
-      inputFormat: inputFormat || undefined,
-    })
+  const pdfPreprocessResult =
+    inputFormat === "pdf"
+      ? await convertPdfToTextFile(inputPath)
+      : createResult<{ inputPath: string; inputFormat: string | undefined }>({
+          inputPath,
+          inputFormat: inputFormat || undefined,
+        })
   if (!pdfPreprocessResult.success) {
     return pdfPreprocessResult
   }
@@ -59,9 +60,7 @@ export async function convertWithPandoc(
   })
 }
 
-async function convertPdfToTextFile(
-  inputPath: string,
-): PromiseResult<{ inputPath: string; inputFormat: undefined }> {
+async function convertPdfToTextFile(inputPath: string): PromiseResult<{ inputPath: string; inputFormat: undefined }> {
   const textPath = `${inputPath}.txt`
 
   return new Promise((resolve) => {
@@ -78,10 +77,12 @@ async function convertPdfToTextFile(
         return
       }
 
-      resolve(createResult({
-        inputPath: textPath,
-        inputFormat: undefined,
-      }))
+      resolve(
+        createResult({
+          inputPath: textPath,
+          inputFormat: undefined,
+        }),
+      )
     })
 
     pdftotext.on("error", (e) => {

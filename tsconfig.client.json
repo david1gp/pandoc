@@ -6,8 +6,8 @@
     "declaration": true,
     "declarationMap": true,
     "noEmit": false,
-    "incremental": false,
+    "incremental": false
   },
   "include": ["./client/**/*"],
-  "exclude": ["node_modules", "dist", "src", "test"],
+  "exclude": ["node_modules", "dist", "src", "test"]
 }
