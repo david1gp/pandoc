@@ -1,4 +1,5 @@
-import { pandocFormatsSharedBinary, pandocFormatsSharedText } from "./pandocFormatsShared.js"
+import { pandocFormatsSharedBinary } from "./pandocFormatsSharedBinary.js"
+import { pandocFormatsSharedText } from "./pandocFormatsSharedText.js"
 
 const pandocFormatsOutputTextSpecific = [
   "ansi",
