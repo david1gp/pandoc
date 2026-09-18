@@ -2,9 +2,9 @@ import { spawn } from "node:child_process"
 import { readFile } from "node:fs/promises"
 import { createResult, createResultError, type PromiseResult } from "@adaptive-ds/result"
 
-const op = "convertWithPandoc"
+const op = "pandocConvert"
 
-export async function convertWithPandoc(
+export async function pandocConvert(
   inputPath: string,
   inputFormat: string,
   outputPath: string,

@@ -5,7 +5,7 @@ import { pandocFromFileTextBodySchema } from "../../../client/pandocFromFileText
 import type { HonoContext } from "../../utils/HonoContext.js"
 import { handlePandocConversion } from "./pandocHandlerShared.js"
 
-const op = "pandocHandlerPut"
+const op = "pandocHandlerFile"
 
 const pandocFromFileBodySchema = v.union([pandocFromFileTextBodySchema, pandocFromFileBinaryBodySchema])
 

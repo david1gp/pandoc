@@ -3,11 +3,11 @@ import * as v from "valibot"
 import { isPandocInputFormat } from "../../../client/pandocFormatsOutput.js"
 import { pandocFromUrlBinaryQuerySchema } from "../../../client/pandocFromUrlBinaryQuerySchema.js"
 import { pandocFromUrlTextQuerySchema } from "../../../client/pandocFromUrlTextQuerySchema.js"
-import { downloadFileFromUrl } from "../../utils/downloadFileFromUrl.js"
+import { fileFromUrlDownload } from "../../utils/fileFromUrlDownload.js"
 import type { HonoContext } from "../../utils/HonoContext.js"
 import { handlePandocConversion } from "./pandocHandlerShared.js"
 
-const op = "pandocHandlerPost"
+const op = "pandocHandlerUrl"
 
 const pandocFromUrlQuerySchema = v.union([pandocFromUrlTextQuerySchema, pandocFromUrlBinaryQuerySchema])
 
@@ -38,7 +38,7 @@ export async function pandocHandlerUrl(c: HonoContext): Promise<Response> {
     return c.json(error, 400)
   }
 
-  const downloadResult = await downloadFileFromUrl(input.url)
+  const downloadResult = await fileFromUrlDownload(input.url)
   if (!downloadResult.success) {
     const error = createResultError(op, downloadResult.errorMessage)
     return c.json(error, 400)

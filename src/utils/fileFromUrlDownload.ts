@@ -1,7 +1,7 @@
 import { createResult, createResultError, type PromiseResult } from "@adaptive-ds/result"
 
-export async function downloadFileFromUrl(url: string): PromiseResult<{ content: Uint8Array; fileName: string }> {
-  const op = "downloadFileFromUrl"
+export async function fileFromUrlDownload(url: string): PromiseResult<{ content: Uint8Array; fileName: string }> {
+  const op = "fileFromUrlDownload"
   try {
     const response = await fetch(url)
     if (!response.ok) {

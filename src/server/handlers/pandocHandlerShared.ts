@@ -4,7 +4,7 @@ import { join } from "node:path"
 import { createResultError } from "@adaptive-ds/result"
 import { isPandocInputFormat, isPandocOutputFormat } from "../../../client/pandocFormatsOutput.js"
 import { pandocFormatIsText } from "../../../client/pandocFormatsText.js"
-import { convertWithPandoc } from "../../pandoc/convertWithPandoc.js"
+import { pandocConvert } from "../../pandoc/pandocConvert.js"
 import type { HonoContext } from "../../utils/HonoContext.js"
 
 const op = "pandocHandler"
@@ -39,7 +39,7 @@ export async function handlePandocConversion(
 
     await Bun.write(inputPath, fileContent)
 
-    const conversionResult = await convertWithPandoc(inputPath, inputFormat, outputPath, outputFormat)
+    const conversionResult = await pandocConvert(inputPath, inputFormat, outputPath, outputFormat)
     if (!conversionResult.success) {
       const error = createResultError(op, conversionResult.errorMessage)
       return c.json(error, 500)
