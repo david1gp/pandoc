@@ -1,5 +1,5 @@
-import { createHash } from "node:crypto"
-import { mkdir } from "node:fs/promises"
+import { mkdtemp, rm } from "node:fs/promises"
+import { tmpdir } from "node:os"
 import { join } from "node:path"
 import { createResultError } from "@adaptive-ds/result"
 import { isPandocInputFormat, isPandocOutputFormat } from "../../../client/pandocFormatsOutput.js"
@@ -8,7 +8,6 @@ import { pandocConvert } from "../../pandoc/pandocConvert.js"
 import type { HonoContext } from "../../utils/HonoContext.js"
 
 const op = "pandocHandler"
-const tempFileDirectory = "/tmp/adaptive-pandoc"
 
 export async function handlePandocConversion(
   c: HonoContext,
@@ -26,16 +25,13 @@ export async function handlePandocConversion(
     return c.json(error, 400)
   }
 
-  let inputPath: string | null = null
-  let outputPath: string | null = null
-  let pdfTextFallbackPath: string | null = null
+  let requestTempDirectory: string | null = null
 
   try {
-    await mkdir(tempFileDirectory, { recursive: true })
-    const hash = createHash("sha256").update(fileContent).digest("hex")
-    inputPath = join(tempFileDirectory, `${hash}.${pandocFormatToExtension(inputFormat)}`)
-    outputPath = join(tempFileDirectory, `${hash}.${pandocFormatToExtension(outputFormat)}`)
-    pdfTextFallbackPath = inputFormat === "pdf" ? `${inputPath}.txt` : null
+    const tempFileDirectory = process.env.ADAPTIVE_PANDOC_TEMP_DIRECTORY ?? tmpdir()
+    requestTempDirectory = await mkdtemp(join(tempFileDirectory, "adaptive-pandoc-"))
+    const inputPath = join(requestTempDirectory, `input.${pandocFormatToExtension(inputFormat)}`)
+    const outputPath = join(requestTempDirectory, `output.${pandocFormatToExtension(outputFormat)}`)
 
     await Bun.write(inputPath, fileContent)
 
@@ -61,27 +57,11 @@ export async function handlePandocConversion(
     const error = createResultError(op, e instanceof Error ? e.message : "Unknown error")
     return c.json(error, 500)
   } finally {
-    if (inputPath) {
+    if (requestTempDirectory) {
       try {
-        await Bun.file(inputPath).delete()
+        await rm(requestTempDirectory, { recursive: true, force: true })
       } catch {
-        /* ignore */
-      }
-    }
-
-    if (outputPath) {
-      try {
-        await Bun.file(outputPath).delete()
-      } catch {
-        /* ignore */
-      }
-    }
-
-    if (pdfTextFallbackPath) {
-      try {
-        await Bun.file(pdfTextFallbackPath).delete()
-      } catch {
-        /* ignore */
+        /* Ignore cleanup failures to preserve the conversion response. */
       }
     }
   }
