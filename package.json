@@ -14,7 +14,7 @@
     "logs": "bash ops/scripts/logs.sh",
     "test": "bun test --preload ./test/setup.ts",
     "test:w": "bun test --preload ./test/setup.ts --watch",
-    "tsc": "bun --check"
+    "tsc": "bun check"
   },
   "peerDependencies": {
     "@adaptive-ds/result": "0.4.0",
