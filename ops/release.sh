@@ -6,6 +6,7 @@ set -e # Exit immediately if a command exits with a non-zero status
 CHANGELOGS_DIR="changelogs"
 REPO_URL=$(git remote get-url origin | sed 's/\.git$//')
 REPO_NAME=$(echo "$REPO_URL" | sed 's/.*://')
+REPO_WEB_URL=$(echo "$REPO_URL" | sed -e 's/^git@github.com:/https:\/\/github.com\//' -e 's/^git:\/\/github.com\//https:\/\/github.com\//')
 PACKAGE_JSON="package.json"
 
 # --- Preflight checks ---
@@ -21,10 +22,20 @@ if ! gh auth status --hostname github.com >/dev/null 2>&1; then
 fi
 
 # --- Validate arguments ---
-if [ $# -gt 1 ]; then
-  echo "Error: Too many arguments. Provide 0 or 1 argument (the next version)."
-  exit 1
-fi
+DEPLOY=true
+VERSION_ARG=""
+for arg in "$@"; do
+  case "$arg" in
+    --no-deploy) DEPLOY=false ;;
+    *)
+      if [ -n "$VERSION_ARG" ]; then
+        echo "Error: Too many arguments. Provide 0 or 1 version argument plus optional --no-deploy."
+        exit 1
+      fi
+      VERSION_ARG="$arg"
+      ;;
+  esac
+done
 
 # --- Helper: get current version from package.json ---
 CURRENT_VERSION=$(jq -r '.version' "$PACKAGE_JSON")
@@ -44,8 +55,8 @@ echo "$CHANGELOG_BODY"
 echo "----------------------------------------"
 
 # --- Step 2: Generate new version ---
-if [ $# -eq 1 ]; then
-  NEW_VERSION=$1
+if [ -n "$VERSION_ARG" ]; then
+  NEW_VERSION=$VERSION_ARG
   echo "🔖 Using provided version: $NEW_VERSION (previous: $CURRENT_VERSION)"
 else
   if echo "$CHANGELOG_BODY" | grep -q "### 🚀 Features"; then
@@ -100,6 +111,16 @@ gh release create "$TAG" \
 
 git branch -f released
 
+# --- Step 9: Deploy the released commit ---
+# Deploy runs after the release commit so the remote serves the released tree,
+# not the pre-release working tree. Skip with --no-deploy for deploy-only flows.
+if [ "$DEPLOY" = true ]; then
+  echo "🚀 Deploying released commit..."
+  bun run deploy
+else
+  echo "⏭️ Skipping deploy (--no-deploy). Run bun run deploy later to serve this release."
+fi
+
 echo "✅ Release v$NEW_VERSION complete!"
 echo "📄 Changelog: $CHANGELOG_FILE"
-echo "🔗 GitHub: https://github.com$(echo "$REPO_URL" | sed 's/.*github.com//')/releases/tag/$TAG"
+echo "🔗 GitHub: $REPO_WEB_URL/releases/tag/$TAG"
